@@ -21,14 +21,15 @@ const defaultRecords = [
 ];
 
 const neonColors = [
-  "#00ffff", "#ff00ff", "#00ff00", "#ffff00", "#ff7777", "#77ffff",
-  "#ff66cc", "#66ffcc", "#ffaa00", "#0099ff", "#ff9999", "#99ff00",
+  "#00ffff", "#ff00ff", "#00ff00", "#ffff00",
+  "#ff7777", "#77ffff", "#ff66cc", "#66ffcc",
+  "#ffaa00", "#0099ff", "#ff9999", "#99ff00",
   "#00ff99", "#ffcc00", "#99ccff", "#ff66ff"
 ];
 
 export default function Display() {
-  const [records, setRecords] = useState(defaultRecords.map(item => ({
-    ...item,
+  const [records, setRecords] = useState(defaultRecords.map(r => ({
+    ...r,
     holder: "--",
     score: "--"
   })));
@@ -56,22 +57,33 @@ export default function Display() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white px-6 py-8">
-      <h1 className="text-4xl font-bold text-center mb-8">成績總表（投影用）</h1>
-      <div className="grid grid-cols-4 gap-4 max-w-screen-xl mx-auto">
+    <div style={{ backgroundColor: "#000", color: "#fff", minHeight: "100vh", padding: "20px", fontFamily: "sans-serif" }}>
+      <h1 style={{ fontSize: "32px", textAlign: "center", marginBottom: "20px" }}>成績總表（投影用）</h1>
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(4, 1fr)",
+        gap: "20px",
+        maxWidth: "1400px",
+        margin: "0 auto"
+      }}>
         {records.map((item, i) => (
           <div
             key={i}
-            className="rounded-xl p-4 flex flex-col items-center justify-center text-center"
             style={{
-              border: `3px solid ${neonColors[i % neonColors.length]}`,
-              boxShadow: `0 0 20px ${neonColors[i % neonColors.length]}`,
-              aspectRatio: "1 / 1"
+              border: `3px solid ${neonColors[i]}`,
+              boxShadow: `0 0 15px ${neonColors[i]}`,
+              padding: "16px",
+              borderRadius: "12px",
+              textAlign: "center",
+              aspectRatio: "1 / 1",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
             }}
           >
-            <div className="text-3xl mb-2">{item.icon} {item.name}</div>
-            <div className="text-xl">成績：{item.score} {item.unit}</div>
-            <div className="text-md mt-1">👑 {item.holder}</div>
+            <div style={{ fontSize: "24px", marginBottom: "8px" }}>{item.icon} {item.name}</div>
+            <div style={{ fontSize: "18px" }}>成績：{item.score} {item.unit}</div>
+            <div style={{ fontSize: "16px", marginTop: "6px" }}>👑 {item.holder}</div>
           </div>
         ))}
       </div>
