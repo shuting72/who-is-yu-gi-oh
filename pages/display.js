@@ -1,36 +1,49 @@
 // pages/display.js
 import { useEffect, useState } from "react";
 
-const iconMap = {
-  "USB王": "🔌",
-  "跳高王": "🏃‍♂️",
-  "擲筊王": "🩴",
-  "高音王": "🎵",
-  "海賊王": "🏴‍☠️",
-  "下腰王": "🧘‍♂️",
-  "準時王": "⏰",
-  "乾眼王": "👁️",
-  "色盲王": "🕶️",
-  "錯王": "❌",
-  "蟹堡王": "🍔",
-  "神射王": "🏹",
-  "搧大王": "🪭",
-  "守門王": "🥅",
-  "定格王": "🤖",
-  "反應王": "⚡",
-};
+const defaultRecords = [
+  { name: "USB王", unit: "次", icon: "🔌" },
+  { name: "跳高王", unit: "公分", icon: "🏃‍♂️" },
+  { name: "擲筊王", unit: "次", icon: "🩴" },
+  { name: "高音王", unit: "音", icon: "🎵" },
+  { name: "海賊王", unit: "分", icon: "🏴‍☠️" },
+  { name: "下腰王", unit: "公分", icon: "🧘‍♂️" },
+  { name: "準時王", unit: "秒", icon: "⏰" },
+  { name: "乾眼王", unit: "秒", icon: "👁️" },
+  { name: "色盲王", unit: "題", icon: "🕶️" },
+  { name: "錯王", unit: "題", icon: "❌" },
+  { name: "蟹堡王", unit: "題", icon: "🍔" },
+  { name: "神射王", unit: "個", icon: "🏹" },
+  { name: "搧大王", unit: "個", icon: "🪭" },
+  { name: "守門王", unit: "顆", icon: "🥅" },
+  { name: "定格王", unit: "公分", icon: "🤖" },
+  { name: "反應王", unit: "毫秒", icon: "⚡" },
+];
 
 const neonColors = [
-  "#0ff", "#f0f", "#0f0", "#ff0", "#f77", "#7ff", "#f0c", "#0fc",
-  "#fa0", "#0af", "#f99", "#9f0", "#0f9", "#fc0", "#9cf", "#f6f"
+  "#00ffff", "#ff00ff", "#00ff00", "#ffff00", "#ff7777", "#77ffff",
+  "#ff66cc", "#66ffcc", "#ffaa00", "#0099ff", "#ff9999", "#99ff00",
+  "#00ff99", "#ffcc00", "#99ccff", "#ff66ff"
 ];
 
 export default function Display() {
-  const [records, setRecords] = useState([]);
+  const [records, setRecords] = useState(defaultRecords.map(item => ({
+    ...item,
+    holder: "--",
+    score: "--"
+  })));
 
   const load = () => {
     const stored = localStorage.getItem("records");
-    if (stored) setRecords(JSON.parse(stored));
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      const merged = defaultRecords.map((item, i) => ({
+        ...item,
+        holder: parsed[i]?.holder || "--",
+        score: parsed[i]?.score || "--"
+      }));
+      setRecords(merged);
+    }
   };
 
   useEffect(() => {
@@ -52,13 +65,13 @@ export default function Display() {
             className="rounded-xl p-4 flex flex-col items-center justify-center text-center"
             style={{
               border: `3px solid ${neonColors[i % neonColors.length]}`,
-              boxShadow: `0 0 15px ${neonColors[i % neonColors.length]}`,
-              minHeight: "120px"
+              boxShadow: `0 0 20px ${neonColors[i % neonColors.length]}`,
+              aspectRatio: "1 / 1"
             }}
           >
-            <div className="text-3xl mb-1">{iconMap[item.name]} {item.name}</div>
-            <div className="text-xl">成績：{item.score || "--"} {item.unit}</div>
-            <div className="text-md mt-1">👑 {item.holder || "--"}</div>
+            <div className="text-3xl mb-2">{item.icon} {item.name}</div>
+            <div className="text-xl">成績：{item.score} {item.unit}</div>
+            <div className="text-md mt-1">👑 {item.holder}</div>
           </div>
         ))}
       </div>
