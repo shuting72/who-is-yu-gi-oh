@@ -1,3 +1,4 @@
+// pages/display.js
 import { useEffect, useState } from "react";
 
 const defaultRecords = [
@@ -52,13 +53,15 @@ export default function Display() {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "#000", color: "#fff", minHeight: "100vh", padding: "20px" }}>
+    <div style={{ backgroundColor: "#000", color: "#fff", height: "100vh", padding: "10px" }}>
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(4, 1fr)",
-        gap: "20px",
-        maxWidth: "1600px",
-        margin: "0 auto"
+        gridTemplateRows: "repeat(4, 1fr)",
+        gap: "10px",
+        height: "100%",
+        width: "100%",
+        boxSizing: "border-box"
       }}>
         {records.map((item, i) => {
           const color = teamColors[item.team] || "#fff";
@@ -66,23 +69,22 @@ export default function Display() {
             <div
               key={i}
               style={{
-                border: `4px solid ${color}`,
-                boxShadow: `0 0 20px ${color}`,
-                padding: "12px",
+                border: `3px solid ${color}`,
+                boxShadow: `0 0 12px ${color}`,
                 borderRadius: "12px",
                 textAlign: "center",
-                aspectRatio: "1 / 1",
+                padding: "1vh",
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "center",
-                fontSize: "1.2vw"
+                justifyContent: "space-between"
               }}
             >
-              <div style={{ fontSize: "2.5vw", marginBottom: "8px" }}>{item.icon} {item.name}</div>
+              <div style={{ fontSize: "3vh", marginBottom: "0.8vh" }}>
+                {item.icon} {item.name}
+              </div>
               <div
                 style={{
-                  fontSize: "1.6vw",
-                  marginBottom: "6px",
+                  fontSize: "2.5vh",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis"
@@ -90,7 +92,13 @@ export default function Display() {
               >
                 成績：{item.score} {item.unit}
               </div>
-              <div style={{ fontSize: "1.2vw" }}>👑 {item.holder}</div>
+              <div style={{
+                fontSize: "2.5vh",
+                whiteSpace: "nowrap",
+                overflow: "hidden"
+              }}>
+                👑 {item.holder}
+              </div>
             </div>
           );
         })}

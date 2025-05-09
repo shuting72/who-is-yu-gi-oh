@@ -28,7 +28,7 @@ export default function Control() {
     if (stored) {
       setRecords(JSON.parse(stored));
     } else {
-      setRecords(defaultRecords.map(d => ({ ...d, holder: "", score: "", team: "1" })));
+      setRecords(defaultRecords.map(d => ({ ...d, holder: "", score: "", team: "" })));
     }
   }, []);
 
@@ -63,6 +63,7 @@ export default function Control() {
             onChange={(e) => update(i, "team", e.target.value)}
             style={{ padding: "6px" }}
           >
+            <option value="">未選擇小隊</option>
             {[...Array(10)].map((_, t) => (
               <option key={t + 1} value={t + 1}>第 {t + 1} 小隊</option>
             ))}
