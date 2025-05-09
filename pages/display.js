@@ -20,6 +20,11 @@ const iconMap = {
   "反應王": "⚡",
 };
 
+const neonColors = [
+  "#0ff", "#f0f", "#0f0", "#ff0", "#f77", "#7ff", "#f0c", "#0fc",
+  "#fa0", "#0af", "#f99", "#9f0", "#0f9", "#fc0", "#9cf", "#f6f"
+];
+
 export default function Display() {
   const [records, setRecords] = useState([]);
 
@@ -38,22 +43,22 @@ export default function Display() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <h1 className="text-3xl font-bold mb-6 text-center">成績總表（投影用）</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="min-h-screen bg-black text-white px-6 py-8">
+      <h1 className="text-4xl font-bold text-center mb-8">成績總表（投影用）</h1>
+      <div className="grid grid-cols-4 gap-4 max-w-screen-xl mx-auto">
         {records.map((item, i) => (
           <div
             key={i}
-            className="p-4 rounded-xl border-2"
-            style={{ borderColor: "#0ff", boxShadow: "0 0 12px #0ff" }}
+            className="rounded-xl p-4 flex flex-col items-center justify-center text-center"
+            style={{
+              border: `3px solid ${neonColors[i % neonColors.length]}`,
+              boxShadow: `0 0 15px ${neonColors[i % neonColors.length]}`,
+              minHeight: "120px"
+            }}
           >
-            <div className="text-3xl text-center mb-2">{iconMap[item.name]} {item.name}</div>
-            <div className="text-xl text-center">
-              成績：{item.score || "--"} {item.unit}
-            </div>
-            <div className="text-md text-center mt-1">
-              👑 {item.holder || "記錄保持人：--"}
-            </div>
+            <div className="text-3xl mb-1">{iconMap[item.name]} {item.name}</div>
+            <div className="text-xl">成績：{item.score || "--"} {item.unit}</div>
+            <div className="text-md mt-1">👑 {item.holder || "--"}</div>
           </div>
         ))}
       </div>
