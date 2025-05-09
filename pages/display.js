@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 
 const defaultRecords = [
   { name: "USB王", unit: "次", icon: "🔌" },
-  { name: "跳高王", unit: "公分", icon: "🏃‍♂️" },
+  { name: "跳高王", unit: "公分", icon: "🪢" },
   { name: "擲筊王", unit: "次", icon: "🩴" },
   { name: "高音王", unit: "音", icon: "🎵" },
   { name: "海賊王", unit: "分", icon: "🏴‍☠️" },
-  { name: "下腰王", unit: "公分", icon: "🧘‍♂️" },
+  { name: "下腰王", unit: "公分", icon: "🏁" },
   { name: "準時王", unit: "秒", icon: "⏰" },
   { name: "乾眼王", unit: "秒", icon: "👁️" },
   { name: "色盲王", unit: "題", icon: "🕶️" },
@@ -20,18 +20,25 @@ const defaultRecords = [
   { name: "反應王", unit: "毫秒", icon: "⚡" },
 ];
 
-const neonColors = [
-  "#00ffff", "#ff00ff", "#00ff00", "#ffff00",
-  "#ff7777", "#77ffff", "#ff66cc", "#66ffcc",
-  "#ffaa00", "#0099ff", "#ff9999", "#99ff00",
-  "#00ff99", "#ffcc00", "#99ccff", "#ff66ff"
-];
+const teamColors = {
+  1: "#ff4c4c", // 紅
+  2: "#ffa500", // 橘
+  3: "#ffde59", // 黃
+  4: "#4cff4c", // 綠
+  5: "#4cd3ff", // 淺藍
+  6: "#4c6cff", // 藍
+  7: "#b84cff", // 紫
+  8: "#ff4cf2", // 粉紅
+  9: "#888",     // 灰
+  10: "#a0522d" // 棕
+};
 
 export default function Display() {
-  const [records, setRecords] = useState(defaultRecords.map(r => ({
-    ...r,
+  const [records, setRecords] = useState(defaultRecords.map(item => ({
+    ...item,
     holder: "--",
-    score: "--"
+    score: "--",
+    team: "1"
   })));
 
   const load = () => {
@@ -41,7 +48,8 @@ export default function Display() {
       const merged = defaultRecords.map((item, i) => ({
         ...item,
         holder: parsed[i]?.holder || "--",
-        score: parsed[i]?.score || "--"
+        score: parsed[i]?.score || "--",
+        team: parsed[i]?.team || "1"
       }));
       setRecords(merged);
     }
@@ -57,33 +65,34 @@ export default function Display() {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "#000", color: "#fff", minHeight: "100vh", padding: "20px", fontFamily: "sans-serif" }}>
-      <h1 style={{ fontSize: "32px", textAlign: "center", marginBottom: "20px" }}>成績總表（投影用）</h1>
+    <div style={{ backgroundColor: "#000", color: "#fff", minHeight: "100vh", padding: "20px" }}>
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(4, 1fr)",
         gap: "20px",
-        maxWidth: "1400px",
+        maxWidth: "1600px",
         margin: "0 auto"
       }}>
         {records.map((item, i) => (
           <div
             key={i}
             style={{
-              border: `3px solid ${neonColors[i]}`,
-              boxShadow: `0 0 15px ${neonColors[i]}`,
-              padding: "16px",
+              border: `4px solid ${teamColors[item.team]}`,
+              boxShadow: `0 0 20px ${teamColors[item.team]}`,
+              padding: "12px",
               borderRadius: "12px",
               textAlign: "center",
               aspectRatio: "1 / 1",
+              fontSize: "2.4vw",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
+              alignItems: "center"
             }}
           >
-            <div style={{ fontSize: "24px", marginBottom: "8px" }}>{item.icon} {item.name}</div>
-            <div style={{ fontSize: "18px" }}>成績：{item.score} {item.unit}</div>
-            <div style={{ fontSize: "16px", marginTop: "6px" }}>👑 {item.holder}</div>
+            <div>{item.icon} {item.name}</div>
+            <div style={{ marginTop: "10px" }}>成績：{item.score} {item.unit}</div>
+            <div style={{ marginTop: "6px" }}>👑 {item.holder}</div>
           </div>
         ))}
       </div>

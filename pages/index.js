@@ -1,7 +1,7 @@
 // pages/index.js
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-const initialData = [
+const defaultRecords = [
   { name: "USB王", unit: "次" },
   { name: "跳高王", unit: "公分" },
   { name: "擲筊王", unit: "次" },
@@ -20,7 +20,7 @@ const initialData = [
   { name: "反應王", unit: "毫秒" },
 ];
 
-export default function ControlPage() {
+export default function Control() {
   const [records, setRecords] = useState([]);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function ControlPage() {
     if (stored) {
       setRecords(JSON.parse(stored));
     } else {
-      setRecords(initialData.map((d) => ({ ...d, holder: "", score: "" })));
+      setRecords(defaultRecords.map(d => ({ ...d, holder: "", score: "", team: "1" })));
     }
   }, []);
 
@@ -37,32 +37,38 @@ export default function ControlPage() {
     updated[index][field] = value;
     setRecords(updated);
     localStorage.setItem("records", JSON.stringify(updated));
-    // sync to display
-    window.localStorage.setItem("broadcast", Date.now());
+    localStorage.setItem("broadcast", Date.now());
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <h1 className="text-2xl font-bold mb-6">控場介面</h1>
-      <div className="space-y-4">
-        {records.map((item, i) => (
-          <div key={i} className="flex items-center gap-4 border-b border-gray-700 pb-2">
-            <div className="w-32 font-semibold text-lg">{item.name}</div>
-            <input
-              placeholder="記錄保持人"
-              value={item.holder}
-              onChange={(e) => update(i, "holder", e.target.value)}
-              className="px-2 py-1 bg-gray-800 rounded w-40"
-            />
-            <input
-              placeholder={`成績（${item.unit}）`}
-              value={item.score}
-              onChange={(e) => update(i, "score", e.target.value)}
-              className="px-2 py-1 bg-gray-800 rounded w-32"
-            />
-          </div>
-        ))}
-      </div>
+    <div style={{ background: "#111", color: "#fff", minHeight: "100vh", padding: "20px" }}>
+      <h2 style={{ fontSize: "28px", marginBottom: "20px" }}>控場介面</h2>
+      {records.map((r, i) => (
+        <div key={i} style={{ marginBottom: "16px", display: "flex", alignItems: "center", gap: "12px" }}>
+          <div style={{ width: "100px", fontWeight: "bold" }}>{r.name}</div>
+          <input
+            value={r.holder}
+            onChange={(e) => update(i, "holder", e.target.value)}
+            placeholder="記錄保持人"
+            style={{ padding: "6px", width: "150px" }}
+          />
+          <input
+            value={r.score}
+            onChange={(e) => update(i, "score", e.target.value)}
+            placeholder={`成績（${r.unit}）`}
+            style={{ padding: "6px", width: "150px" }}
+          />
+          <select
+            value={r.team}
+            onChange={(e) => update(i, "team", e.target.value)}
+            style={{ padding: "6px" }}
+          >
+            {[...Array(10)].map((_, t) => (
+              <option key={t + 1} value={t + 1}>第 {t + 1} 小隊</option>
+            ))}
+          </select>
+        </div>
+      ))}
     </div>
   );
 }
