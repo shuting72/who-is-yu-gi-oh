@@ -1,9 +1,8 @@
-// pages/display.js
 import { useEffect, useState } from "react";
 
 const defaultRecords = [
   { name: "USB王", unit: "次", icon: "🔌" },
-  { name: "跳高王", unit: "公分", icon: "🪢" },
+  { name: "跳高王", unit: "公分", icon: "🔔" }, // ← 已更新
   { name: "擲筊王", unit: "次", icon: "🩴" },
   { name: "高音王", unit: "音", icon: "🎵" },
   { name: "海賊王", unit: "分", icon: "🏴‍☠️" },
@@ -21,8 +20,8 @@ const defaultRecords = [
 ];
 
 const teamColors = {
-  1: "#ff4c4c",  2: "#ffa500",  3: "#ffde59",  4: "#4cff4c",  5: "#4cd3ff",
-  6: "#4c6cff",  7: "#b84cff",  8: "#ff4cf2",  9: "#888",     10: "#a0522d"
+  1: "#ff4c4c", 2: "#ffa500", 3: "#ffde59", 4: "#4cff4c", 5: "#4cd3ff",
+  6: "#4c6cff", 7: "#b84cff", 8: "#ff4cf2", 9: "#888", 10: "#a0522d"
 };
 
 export default function Display() {
@@ -76,26 +75,28 @@ export default function Display() {
                 padding: "1vh",
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "space-between"
+                justifyContent: "center"
               }}
             >
-              <div style={{ fontSize: "3vh", marginBottom: "0.8vh" }}>
+              <div style={{
+                fontSize: "4.5vh", marginBottom: "1vh", whiteSpace: "nowrap"
+              }}>
                 {item.icon} {item.name}
               </div>
-              <div
-                style={{
-                  fontSize: "2.5vh",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis"
-                }}
-              >
+              <div style={{
+                fontSize: "3.5vh",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                marginBottom: "0.6vh"
+              }}>
                 成績：{item.score} {item.unit}
               </div>
               <div style={{
-                fontSize: "2.5vh",
+                fontSize: "3vh",
                 whiteSpace: "nowrap",
-                overflow: "hidden"
+                overflow: "hidden",
+                textOverflow: "ellipsis"
               }}>
                 👑 {item.holder}
               </div>
