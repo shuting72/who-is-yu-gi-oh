@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const challenges = [
   { id: 1, name: "USB王", unit: "次" },
@@ -25,6 +25,26 @@ export default function Scoreboard() {
   const [nameInput, setNameInput] = useState("");
   const [scoreInput, setScoreInput] = useState("");
 
+  // sync via localStorage for multi-tab
+  useEffect(() => {
+    const stored = localStorage.getItem("records");
+    if (stored) setRecords(JSON.parse(stored));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("records", JSON.stringify(records));
+    window.dispatchEvent(new Event("storage"));
+  }, [records]);
+
+  useEffect(() => {
+    const handler = () => {
+      const latest = localStorage.getItem("records");
+      if (latest) setRecords(JSON.parse(latest));
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
+
   const handleSave = () => {
     setRecords({
       ...records,
@@ -35,6 +55,9 @@ export default function Scoreboard() {
     setScoreInput("");
   };
 
+  const path = typeof window !== "undefined" ? window.location.pathname : "/";
+  const isDisplay = path === "/display";
+
   return (
     <div className="min-h-screen bg-black text-white p-6">
       <h1 className="text-3xl text-center mb-6 font-bold text-white">競賽成績榜</h1>
@@ -43,14 +66,16 @@ export default function Scoreboard() {
           <div
             key={c.id}
             onClick={() => {
+              if (isDisplay) return;
               setSelected(c);
               setNameInput(records[c.id]?.name || "");
               setScoreInput(records[c.id]?.score || "");
             }}
-            className="rounded-2xl p-4 bg-black border-2 border-pink-500 shadow-xl hover:scale-105 transition-transform cursor-pointer text-center"
+            className={`rounded-2xl p-4 border-2 shadow-xl transition-transform cursor-pointer text-center 
+              ${isDisplay ? "bg-gray-900 border-green-400" : "bg-black border-pink-500 hover:scale-105"}`}
           >
-            <div className="text-xl font-bold text-pink-400">{c.name}</div>
-            <div className="mt-2 text-lg text-white">
+            <div className="text-xl font-bold text-green-400">{c.name}</div>
+            <div className="mt-2 text-2xl font-bold">
               {records[c.id]?.score ? `${records[c.id].score} ${c.unit}` : "--"}
             </div>
             <div className="text-sm text-gray-300">
@@ -61,7 +86,7 @@ export default function Scoreboard() {
       </div>
 
       {/* Modal */}
-      {selected && (
+      {selected && !isDisplay && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
           <div className="bg-gray-900 p-6 rounded-xl w-[90%] max-w-md border border-pink-500">
             <h2 className="text-xl mb-4 text-pink-400 font-bold">{selected.name}</h2>
