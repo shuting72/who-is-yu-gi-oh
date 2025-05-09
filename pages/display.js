@@ -1,4 +1,3 @@
-// pages/display.js
 import { useEffect, useState } from "react";
 
 const defaultRecords = [
@@ -21,24 +20,13 @@ const defaultRecords = [
 ];
 
 const teamColors = {
-  1: "#ff4c4c", // 紅
-  2: "#ffa500", // 橘
-  3: "#ffde59", // 黃
-  4: "#4cff4c", // 綠
-  5: "#4cd3ff", // 淺藍
-  6: "#4c6cff", // 藍
-  7: "#b84cff", // 紫
-  8: "#ff4cf2", // 粉紅
-  9: "#888",     // 灰
-  10: "#a0522d" // 棕
+  1: "#ff4c4c",  2: "#ffa500",  3: "#ffde59",  4: "#4cff4c",  5: "#4cd3ff",
+  6: "#4c6cff",  7: "#b84cff",  8: "#ff4cf2",  9: "#888",     10: "#a0522d"
 };
 
 export default function Display() {
-  const [records, setRecords] = useState(defaultRecords.map(item => ({
-    ...item,
-    holder: "--",
-    score: "--",
-    team: "1"
+  const [records, setRecords] = useState(defaultRecords.map(r => ({
+    ...r, score: "--", holder: "--", team: ""
   })));
 
   const load = () => {
@@ -49,7 +37,7 @@ export default function Display() {
         ...item,
         holder: parsed[i]?.holder || "--",
         score: parsed[i]?.score || "--",
-        team: parsed[i]?.team || "1"
+        team: parsed[i]?.team || ""
       }));
       setRecords(merged);
     }
@@ -57,11 +45,10 @@ export default function Display() {
 
   useEffect(() => {
     load();
-    const sync = setInterval(() => {
-      const t = localStorage.getItem("broadcast");
-      if (t) load();
+    const interval = setInterval(() => {
+      if (localStorage.getItem("broadcast")) load();
     }, 1000);
-    return () => clearInterval(sync);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -73,28 +60,40 @@ export default function Display() {
         maxWidth: "1600px",
         margin: "0 auto"
       }}>
-        {records.map((item, i) => (
-          <div
-            key={i}
-            style={{
-              border: `4px solid ${teamColors[item.team]}`,
-              boxShadow: `0 0 20px ${teamColors[item.team]}`,
-              padding: "12px",
-              borderRadius: "12px",
-              textAlign: "center",
-              aspectRatio: "1 / 1",
-              fontSize: "2.4vw",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
-            <div>{item.icon} {item.name}</div>
-            <div style={{ marginTop: "10px" }}>成績：{item.score} {item.unit}</div>
-            <div style={{ marginTop: "6px" }}>👑 {item.holder}</div>
-          </div>
-        ))}
+        {records.map((item, i) => {
+          const color = teamColors[item.team] || "#fff";
+          return (
+            <div
+              key={i}
+              style={{
+                border: `4px solid ${color}`,
+                boxShadow: `0 0 20px ${color}`,
+                padding: "12px",
+                borderRadius: "12px",
+                textAlign: "center",
+                aspectRatio: "1 / 1",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                fontSize: "1.2vw"
+              }}
+            >
+              <div style={{ fontSize: "2.5vw", marginBottom: "8px" }}>{item.icon} {item.name}</div>
+              <div
+                style={{
+                  fontSize: "1.6vw",
+                  marginBottom: "6px",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis"
+                }}
+              >
+                成績：{item.score} {item.unit}
+              </div>
+              <div style={{ fontSize: "1.2vw" }}>👑 {item.holder}</div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
