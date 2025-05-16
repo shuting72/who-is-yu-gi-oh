@@ -117,7 +117,7 @@ export default function Display() {
                 成績：{item.score} {item.unit}
               </div>
               <div style={{
-                fontSize: "3vh",
+                fontSize: "3.5vh",
                 whiteSpace: "nowrap"
               }}>
                 👑 {item.holder}
