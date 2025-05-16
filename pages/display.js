@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
 const defaultRecords = [
-  { name: "USB王", unit: "次", icon: "🔌" },
+  { name: "USB王", unit: "次", icon: "💾" },
   { name: "跳高王", unit: "公分", icon: "🔔" },
   { name: "擲筊王", unit: "次", icon: "🩴" },
   { name: "高音王", unit: "音", icon: "🎵" },
   { name: "海賊王", unit: "分", icon: "🏴‍☠️" },
-  { name: "下腰王", unit: "公分", icon: "🏁" },
+  { name: "下腰王", unit: "公分", icon: "📏" },
   { name: "準時王", unit: "秒", icon: "⏰" },
   { name: "乾眼王", unit: "秒", icon: "👁️" },
   { name: "色盲王", unit: "題", icon: "🕶️" },
