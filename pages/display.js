@@ -29,7 +29,7 @@ const teamColors = {
   7: "#0000CD",   // 深藍
   8: "#800080",   // 紫
   9: "#FF69B4",   // 粉紅
-  10: "#8B4513",  // 咖啡色（替代青色）
+  10: "#8B4513",  // 咖啡
 };
 
 export default function Display() {
@@ -61,60 +61,55 @@ export default function Display() {
 
   return (
     <div style={{
-      backgroundColor: "#000",
-      color: "#fff",
-      height: "100vh",
-      width: "100vw",
-      overflow: "hidden",
       margin: 0,
       padding: 0,
-      boxSizing: "border-box",
+      height: "100vh",
+      width: "100vw",
+      backgroundColor: "#000",
+      overflow: "hidden",
+      boxSizing: "border-box"
     }}>
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(4, 1fr)",
         gridTemplateRows: "repeat(4, 1fr)",
-        gap: "1vh",
         height: "100%",
         width: "100%",
-        padding: "1vh",
-        boxSizing: "border-box"
+        gap: 0,
       }}>
         {records.map((item, i) => {
-          const color = item.team ? teamColors[item.team] || "#8B4513" : "#111"; // default dark bg
+          const bg = item.team ? (teamColors[item.team] || "#8B4513") : "#111";
+          const shadow = "2px 2px 4px #000";
           return (
-            <div
-              key={i}
-              style={{
-                backgroundColor: item.team ? color : "#111",
-                borderRadius: "12px",
-                textAlign: "center",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100%",
-                color: "#fff",
-                padding: "0.5vh",
-              }}
-            >
+            <div key={i} style={{
+              backgroundColor: bg,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              border: "1px solid #000",
+              boxSizing: "border-box"
+            }}>
               <div style={{
-                fontSize: "4.8vh",
+                fontSize: "4.6vh",
                 fontWeight: "bold",
+                textShadow: shadow,
                 marginBottom: "1vh",
-                whiteSpace: "nowrap"
+                whiteSpace: "nowrap",
               }}>
                 {item.icon} {item.name}
               </div>
               <div style={{
                 fontSize: "3.5vh",
-                marginBottom: "0.8vh",
-                whiteSpace: "nowrap"
+                textShadow: shadow,
+                marginBottom: "1vh",
+                whiteSpace: "nowrap",
               }}>
                 成績：{item.score} {item.unit}
               </div>
               <div style={{
                 fontSize: "3vh",
+                textShadow: shadow,
                 whiteSpace: "nowrap"
               }}>
                 👑 {item.holder}
