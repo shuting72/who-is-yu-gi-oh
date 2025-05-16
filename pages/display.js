@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const defaultRecords = [
   { name: "USB王", unit: "次", icon: "🔌" },
-  { name: "跳高王", unit: "公分", icon: "🔔" }, // ← 已更新
+  { name: "跳高王", unit: "公分", icon: "🔔" },
   { name: "擲筊王", unit: "次", icon: "🩴" },
   { name: "高音王", unit: "音", icon: "🎵" },
   { name: "海賊王", unit: "分", icon: "🏴‍☠️" },
@@ -20,8 +20,16 @@ const defaultRecords = [
 ];
 
 const teamColors = {
-  1: "#ff4c4c", 2: "#ffa500", 3: "#ffde59", 4: "#4cff4c", 5: "#4cd3ff",
-  6: "#4c6cff", 7: "#b84cff", 8: "#ff4cf2", 9: "#888", 10: "#a0522d"
+  1: "#FF0000",   // 紅
+  2: "#FFA500",   // 橘
+  3: "#FFFF00",   // 黃
+  4: "#39FF14",   // 螢光綠
+  5: "#007F00",   // 深綠
+  6: "#00BFFF",   // 淺藍
+  7: "#0000CD",   // 深藍
+  8: "#800080",   // 紫
+  9: "#FF69B4",   // 粉紅
+  10: "#FFFFFF",  // 白
 };
 
 export default function Display() {
@@ -52,15 +60,13 @@ export default function Display() {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "#000", color: "#fff", height: "100vh", padding: "10px" }}>
+    <div style={{ backgroundColor: "#000", color: "#fff", height: "100vh", padding: "0", margin: 0 }}>
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(4, 1fr)",
         gridTemplateRows: "repeat(4, 1fr)",
-        gap: "10px",
-        height: "100%",
-        width: "100%",
-        boxSizing: "border-box"
+        height: "100vh",
+        width: "100vw",
       }}>
         {records.map((item, i) => {
           const color = teamColors[item.team] || "#fff";
@@ -68,14 +74,15 @@ export default function Display() {
             <div
               key={i}
               style={{
-                border: `3px solid ${color}`,
-                boxShadow: `0 0 12px ${color}`,
+                border: `6px solid ${color}`,
+                boxShadow: `0 0 20px ${color}`,
                 borderRadius: "12px",
                 textAlign: "center",
                 padding: "1vh",
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "center"
+                justifyContent: "center",
+                alignItems: "center"
               }}
             >
               <div style={{
@@ -95,8 +102,7 @@ export default function Display() {
               <div style={{
                 fontSize: "3vh",
                 whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis"
+                overflow: "hidden"
               }}>
                 👑 {item.holder}
               </div>
