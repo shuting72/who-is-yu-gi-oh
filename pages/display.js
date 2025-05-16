@@ -19,17 +19,18 @@ const defaultRecords = [
   { name: "反應王", unit: "毫秒", icon: "⚡" },
 ];
 
+// 十個清楚可辨識顏色
 const teamColors = {
   1: "#FF0000",   // 紅
   2: "#FFA500",   // 橘
   3: "#FFFF00",   // 黃
-  4: "#39FF14",   // 螢光綠
-  5: "#007F00",   // 深綠
+  4: "#00FF7F",   // 螢光綠（亮綠）
+  5: "#228B22",   // 森林綠（替代深綠）
   6: "#00BFFF",   // 淺藍
   7: "#0000CD",   // 深藍
   8: "#800080",   // 紫
   9: "#FF69B4",   // 粉紅
-  10: "#FFFFFF",  // 白
+  10: "#00FFFF",  // 青色（替代白色）
 };
 
 export default function Display() {
@@ -60,33 +61,47 @@ export default function Display() {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "#000", color: "#fff", height: "100vh", padding: "0", margin: 0 }}>
+    <div style={{
+      backgroundColor: "#000",
+      color: "#fff",
+      height: "100vh",
+      width: "100vw",
+      margin: 0,
+      padding: 0,
+      overflow: "hidden"
+    }}>
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(4, 1fr)",
         gridTemplateRows: "repeat(4, 1fr)",
         height: "100vh",
         width: "100vw",
+        gap: "1.5vh",
+        padding: "1vh",
+        boxSizing: "border-box"
       }}>
         {records.map((item, i) => {
-          const color = teamColors[item.team] || "#fff";
+          const color = teamColors[item.team] || "#00FFFF"; // 預設青色
           return (
             <div
               key={i}
               style={{
-                border: `6px solid ${color}`,
-                boxShadow: `0 0 20px ${color}`,
+                border: `8px solid ${color}`,
+                boxShadow: `0 0 25px ${color}`,
                 borderRadius: "12px",
                 textAlign: "center",
                 padding: "1vh",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
-                alignItems: "center"
+                alignItems: "center",
+                height: "100%",
               }}
             >
               <div style={{
-                fontSize: "4.5vh", marginBottom: "1vh", whiteSpace: "nowrap"
+                fontSize: "4.5vh",
+                marginBottom: "1vh",
+                whiteSpace: "nowrap"
               }}>
                 {item.icon} {item.name}
               </div>
