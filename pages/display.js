@@ -24,7 +24,7 @@ const teamColors = {
   2: "#FFA500",   // 橘
   3: "#FFFF00",   // 黃
   4: "#00FF7F",   // 螢光綠
-  5: "#228B22",   // 森林綠
+  5: "#228B22",   // 深綠
   6: "#00BFFF",   // 淺藍
   7: "#0000CD",   // 深藍
   8: "#800080",   // 紫
@@ -63,12 +63,20 @@ export default function Display() {
     <div style={{
       margin: 0,
       padding: 0,
-      height: "100vh",
-      width: "100vw",
       backgroundColor: "#000",
+      width: "100vw",
+      height: "100vh",
       overflow: "hidden",
-      boxSizing: "border-box"
     }}>
+      <style>{`
+        html, body {
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          height: 100%;
+          width: 100%;
+        }
+      `}</style>
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(4, 1fr)",
@@ -79,7 +87,8 @@ export default function Display() {
       }}>
         {records.map((item, i) => {
           const bg = item.team ? (teamColors[item.team] || "#8B4513") : "#111";
-          const shadow = "2px 2px 4px #000";
+          const textShadow = "2px 2px 4px #000";
+
           return (
             <div key={i} style={{
               backgroundColor: bg,
@@ -88,28 +97,27 @@ export default function Display() {
               justifyContent: "center",
               alignItems: "center",
               border: "1px solid #000",
+              color: "#fff",
+              textShadow: textShadow,
               boxSizing: "border-box"
             }}>
               <div style={{
-                fontSize: "4.6vh",
+                fontSize: "4.8vh",
                 fontWeight: "bold",
-                textShadow: shadow,
                 marginBottom: "1vh",
-                whiteSpace: "nowrap",
+                whiteSpace: "nowrap"
               }}>
                 {item.icon} {item.name}
               </div>
               <div style={{
                 fontSize: "3.5vh",
-                textShadow: shadow,
                 marginBottom: "1vh",
-                whiteSpace: "nowrap",
+                whiteSpace: "nowrap"
               }}>
                 成績：{item.score} {item.unit}
               </div>
               <div style={{
                 fontSize: "3vh",
-                textShadow: shadow,
                 whiteSpace: "nowrap"
               }}>
                 👑 {item.holder}
