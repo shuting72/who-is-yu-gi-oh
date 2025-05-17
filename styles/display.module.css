@@ -1,0 +1,94 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  width: 100%;
+  height: 100%;
+  gap: 10px;
+  padding: 10px;
+}
+
+.card {
+  color: white;
+  font-weight: bold;
+  font-size: 1.8vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  box-shadow: 0 0 10px #000;
+  text-shadow: 2px 2px 4px black;
+}
+
+.title {
+  font-size: 2vw;
+  margin-bottom: 0.5em;
+  text-shadow: 2px 2px 4px black;
+}
+
+.score, .champion {
+  font-size: 1.4vw;
+  text-shadow: 2px 2px 4px black;
+}
+
+.color0 { background-color: #ff0000; }
+.color1 { background-color: #ffa500; }
+.color2 { background-color: #ffff00; color: black; }
+.color3 { background-color: #00cc66; }
+.color4 { background-color: #228B22; }
+.color5 { background-color: #1e90ff; }
+.color6 { background-color: #00008b; }
+.color7 { background-color: #800080; }
+.color8 { background-color: #ff69b4; }
+.color9 { background-color: #999999; }
+
+.rankingRow {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 2vw;
+  background-color: black;
+}
+
+.rankingBlock {
+  background: #1a1a1a;
+  border-radius: 10px;
+  box-shadow: 0 0 20px white;
+  padding: 2vw;
+  min-width: 35vw;
+  max-width: 40vw;
+  color: white;
+  text-align: left;
+}
+
+.rankingTitle {
+  font-size: 2.5vw;
+  font-weight: bold;
+  margin-bottom: 1vw;
+  text-shadow: 2px 2px 5px white;
+}
+
+.rankingList {
+  list-style: none;
+  padding: 0;
+  font-size: 1.8vw;
+  line-height: 1.8;
+  text-shadow: 2px 2px 4px black;
+}
+
+.rankIcon {
+  margin-right: 1vw;
+}
