@@ -125,7 +125,7 @@ export default function Display() {
 
             return (
               <div key={idx} style={{
-                flex: "0 0 45%",
+                flex: "0 0 48%",
                 backgroundColor: "#1a1a1a",
                 border: "3px solid white",
                 borderRadius: "10px",
