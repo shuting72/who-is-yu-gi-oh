@@ -25,15 +25,11 @@ const defaultRecords = [
   { name: "反應王", unit: "毫秒", icon: "⚡", ranking: [] },
 ];
 
-const teamColors = {
-  1: "#FF0000", 2: "#FFA500", 3: "#FFFF00", 4: "#00FF7F", 5: "#228B22",
-  6: "#00BFFF", 7: "#0000CD", 8: "#800080", 9: "#FF69B4", 10: "#8B4513"
-};
-
 export default function Display() {
   const [records, setRecords] = useState(defaultRecords.map(r => ({
     ...r, score: "--", holder: "--", team: r.team || "", ranking: r.ranking || []
   })));
+
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -52,14 +48,19 @@ export default function Display() {
   }, []);
 
   useEffect(() => {
+    const totalPages = 9; // 1 總覽 + 8 排行榜
     const interval = setInterval(() => {
-      setPage((prev) => (prev % 17) + 1);
-    }, page === 1 ? 10000 : 5000);
+      setPage((prev) => (prev % totalPages) + 1);
+    }, page === 1 ? 15000 : 7000); // 15 秒總覽，7 秒排行榜
     return () => clearInterval(interval);
   }, [page]);
 
+  const getMedal = (index) => {
+    return ["🥇", "🥈", "🥉", "4️⃣", "5️⃣"][index] || "";
+  };
+
   return (
-    <div style={{ margin: 0, padding: 0, height: "100vh", width: "100vw", overflow: "hidden" }}>
+    <div style={{ margin: 0, padding: 0, height: "100vh", width: "100vw", overflow: "hidden", backgroundColor: "#000" }}>
       <style>{`
         html, body {
           margin: 0;
@@ -67,69 +68,89 @@ export default function Display() {
           overflow: hidden;
           height: 100%;
           width: 100%;
+          background-color: #000;
         }
       `}</style>
 
       {page === 1 ? (
+        // 總覽畫面
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)",
           gridTemplateRows: "repeat(4, 1fr)",
           height: "100%",
           width: "100%",
-          gap: 0,
-          backgroundColor: "#000"
+          gap: 0
         }}>
-          {records.map((item, i) => {
-            const bg = item.team ? (teamColors[item.team] || "#8B4513") : "#111";
-            const shadow = "2px 2px 4px #000";
+          {records.map((item, i) => (
+            <div key={i} style={{
+              backgroundColor: "#111",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              border: "1px solid #000",
+              color: "#fff",
+              textShadow: "2px 2px 4px #000",
+              boxSizing: "border-box"
+            }}>
+              <div style={{ fontSize: "4.8vh", fontWeight: "bold", marginBottom: "1vh", whiteSpace: "nowrap" }}>
+                {item.icon} {item.name}
+              </div>
+              <div style={{ fontSize: "3.5vh", marginBottom: "1vh", whiteSpace: "nowrap" }}>
+                成績：{item.score} {item.unit}
+              </div>
+              <div style={{ fontSize: "3.5vh", whiteSpace: "nowrap" }}>
+                👑 {item.holder}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        // 排行榜畫面
+        <div style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-around",
+          alignItems: "center",
+          height: "100%",
+          padding: "2vh",
+          backgroundColor: "#000",
+          color: "#fff"
+        }}>
+          {[0, 1].map((offset) => {
+            const idx = (page - 2) * 2 + offset;
+            const item = records[idx];
+            if (!item) return null;
+
             return (
-              <div key={i} style={{
-                backgroundColor: bg,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                border: "1px solid #000",
-                color: "#fff",
-                textShadow: shadow,
-                boxSizing: "border-box"
+              <div key={idx} style={{
+                flex: "0 0 45%",
+                backgroundColor: "#1a1a1a",
+                border: "3px solid white",
+                borderRadius: "10px",
+                padding: "2vh",
+                boxShadow: "0 0 20px white",
+                textAlign: "center"
               }}>
-                <div style={{ fontSize: "4.8vh", fontWeight: "bold", marginBottom: "1vh", whiteSpace: "nowrap" }}>
+                <div style={{
+                  fontSize: "5vh",
+                  fontWeight: "bold",
+                  marginBottom: "2vh",
+                  textShadow: "0 0 10px white"
+                }}>
                   {item.icon} {item.name}
                 </div>
-                <div style={{ fontSize: "3.5vh", marginBottom: "1vh", whiteSpace: "nowrap" }}>
-                  成績：{item.score} {item.unit}
-                </div>
-                <div style={{ fontSize: "3.5vh", whiteSpace: "nowrap" }}>
-                  👑 {item.holder}
-                </div>
+                <ol style={{ listStyle: "none", padding: 0, fontSize: "3.5vh", textShadow: "0 0 8px white" }}>
+                  {(item.ranking || []).slice(0, 5).map((r, i) => (
+                    <li key={i} style={{ marginBottom: "1.5vh" }}>
+                      {getMedal(i)} {r.name} - {r.score}
+                    </li>
+                  ))}
+                </ol>
               </div>
             );
           })}
-        </div>
-      ) : (
-        <div style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#000",
-          color: "#fff",
-          height: "100%",
-          width: "100%",
-          textAlign: "center",
-        }}>
-          <div style={{ fontSize: "6vh", marginBottom: "4vh", textShadow: "2px 2px 4px #000" }}>
-            {records[page - 2].icon} {records[page - 2].name}
-          </div>
-          <ol style={{ fontSize: "4vh", listStyle: "none", padding: 0, margin: 0, textShadow: "2px 2px 4px #000" }}>
-            {(records[page - 2].ranking || []).slice(0, 5).map((r, idx) => (
-              <li key={idx} style={{ marginBottom: "2vh" }}>
-                {["🥇", "🥈", "🥉", "⭐", "⭐"][idx]} {r.name} - {r.score}
-              </li>
-            ))}
-          </ol>
         </div>
       )}
     </div>
