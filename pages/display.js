@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import styles from '../styles/display.module.css'
 
 const games = [
   'USB王', '跳高王', '擲筊王', '高音王',
