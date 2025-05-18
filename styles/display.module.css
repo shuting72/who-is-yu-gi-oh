@@ -1,81 +1,32 @@
-.container {
-  width: 100vw;
-  height: 100vh;
-  background: black;
+.rankingRow {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  width: 90vw;
-  height: 90vh;
-}
-
-.gridItem {
-  background-color: #111;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  border-radius: 10px;
-  padding: 10px;
-  box-shadow: 0 0 4px white;
-}
-
-.title {
-  font-size: 2rem;
-  text-shadow: 2px 2px 4px black;
-  margin-bottom: 10px;
-}
-
-.score {
-  font-size: 1.5rem;
-  margin: 4px 0;
-  text-shadow: 2px 2px 3px black;
-}
-
-.champion {
-  font-size: 1.2rem;
-  text-shadow: 2px 2px 3px black;
-}
-
-.pageWrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
-  width: 100vw;
+  gap: 80px; /* 加強間距 */
   height: 100vh;
 }
 
-.rankBlock {
+.rankingBlock {
   background-color: #1a1a1a;
-  color: white;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 0 15px white;
-  width: 36vw;
+  border-radius: 16px;
+  box-shadow: 0 0 20px #fff;
+  padding: 40px;
+  width: 40vw; /* 原本可能是 24vw，可加大成 40% 螢幕寬度 */
+  max-width: 600px;
+  min-width: 480px;
+}
+
+.rankingTitle {
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
   text-align: center;
+  color: white;
+  text-shadow: 2px 2px 4px black;
 }
 
-.rankTitle {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px 5px black;
-}
-
-.rankList {
-  list-style: none;
-  padding: 0;
-  font-size: 1.5rem;
-}
-
-.rankIcon {
-  margin-right: 10px;
+.rankingList {
+  font-size: 1.8rem;
+  line-height: 2.4rem;
+  color: white;
+  text-shadow: 1px 1px 2px black;
 }
