@@ -118,5 +118,6 @@ export default function Home() {
     marginTop: '40px',
     cursor: 'pointer'
   }}
->初始化所有成績</button>
-
+>
+  🔄
+</button>
