@@ -1,4 +1,3 @@
-// pages/index.js
 import { useEffect, useState } from "react";
 
 const defaultRecords = [
@@ -21,53 +20,67 @@ const defaultRecords = [
 ];
 
 export default function Control() {
-  const [records, setRecords] = useState([]);
+  const [records, setRecords] = useState({});
 
   useEffect(() => {
-    const stored = localStorage.getItem("records");
+    const stored = localStorage.getItem("scoreboard");
     if (stored) {
       setRecords(JSON.parse(stored));
     } else {
-      setRecords(defaultRecords.map(d => ({ ...d, holder: "", score: "", team: "" })));
+      const initial = {};
+      defaultRecords.forEach(d => {
+        initial[d.name] = Array.from({ length: 5 }, () => ({
+          name: "",
+          score: "",
+          team: "",
+          unit: d.unit
+        }));
+      });
+      setRecords(initial);
     }
   }, []);
 
-  const update = (index, field, value) => {
-    const updated = [...records];
-    updated[index][field] = value;
+  const update = (stage, index, field, value) => {
+    const updated = { ...records };
+    updated[stage][index][field] = value;
     setRecords(updated);
-    localStorage.setItem("records", JSON.stringify(updated));
+    localStorage.setItem("scoreboard", JSON.stringify(updated));
     localStorage.setItem("broadcast", Date.now());
   };
 
   return (
     <div style={{ background: "#111", color: "#fff", minHeight: "100vh", padding: "20px" }}>
       <h2 style={{ fontSize: "28px", marginBottom: "20px" }}>控場介面</h2>
-      {records.map((r, i) => (
-        <div key={i} style={{ marginBottom: "16px", display: "flex", alignItems: "center", gap: "12px" }}>
-          <div style={{ width: "100px", fontWeight: "bold" }}>{r.name}</div>
-          <input
-            value={r.holder}
-            onChange={(e) => update(i, "holder", e.target.value)}
-            placeholder="記錄保持人"
-            style={{ padding: "6px", width: "150px" }}
-          />
-          <input
-            value={r.score}
-            onChange={(e) => update(i, "score", e.target.value)}
-            placeholder={`成績（${r.unit}）`}
-            style={{ padding: "6px", width: "150px" }}
-          />
-          <select
-            value={r.team}
-            onChange={(e) => update(i, "team", e.target.value)}
-            style={{ padding: "6px" }}
-          >
-            <option value="">未選擇小隊</option>
-            {[...Array(10)].map((_, t) => (
-              <option key={t + 1} value={t + 1}>第 {t + 1} 小隊</option>
-            ))}
-          </select>
+      {defaultRecords.map((record) => (
+        <div key={record.name} style={{ marginBottom: "20px" }}>
+          <div style={{ fontWeight: "bold", marginBottom: "8px" }}>{record.name}</div>
+          {records[record.name]?.map((item, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "4px" }}>
+              <span style={{ width: "24px" }}>{["🥇","🥈","🥉","4️⃣","5️⃣"][i]}</span>
+              <input
+                value={item.name}
+                onChange={(e) => update(record.name, i, "name", e.target.value)}
+                placeholder="記錄保持人"
+                style={{ padding: "4px", width: "150px", color: "black" }}
+              />
+              <input
+                value={item.score}
+                onChange={(e) => update(record.name, i, "score", e.target.value)}
+                placeholder={`成績（${record.unit}）`}
+                style={{ padding: "4px", width: "150px", color: "black" }}
+              />
+              <select
+                value={item.team}
+                onChange={(e) => update(record.name, i, "team", e.target.value)}
+                style={{ padding: "4px", color: "black" }}
+              >
+                <option value="">未選擇小隊</option>
+                {[...Array(10)].map((_, t) => (
+                  <option key={t + 1} value={t + 1}>第 {t + 1} 小隊</option>
+                ))}
+              </select>
+            </div>
+          ))}
         </div>
       ))}
     </div>

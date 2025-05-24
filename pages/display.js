@@ -59,7 +59,7 @@ const Display = () => {
         <div className={styles.stage}>{icons[index]} {stage}</div>
         {records.slice(0, 5).map((item, i) => (
           <div key={i} className={styles.entry}>
-            {["🥇","🥈","🥉","4️⃣","5️⃣"][i]} {item.name} - {item.score}次
+            {["🥇","🥈","🥉","4️⃣","5️⃣"][i]} {item.name} - {item.score}{item.unit}
           </div>
         ))}
       </div>
