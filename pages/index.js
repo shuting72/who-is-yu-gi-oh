@@ -27,6 +27,8 @@ export default function Home() {
 
   useEffect(() => {
     localStorage.setItem('scoreData', JSON.stringify(data))
+    localStorage.setItem("scoreboard", JSON.stringify(data))  // ← 這行確保同步給投影畫面用
+    localStorage.setItem("broadcast", Date.now())              // ← 這行確保畫面即時更新
   }, [data])
 
   const handleChange = (field, index, key, value) => {
@@ -55,7 +57,8 @@ export default function Home() {
 
   return (
     <div className={styles.admin}>
-      <h2>控場介面</h2>
+      <h2 style={{ color: 'white' }}>控場介面</h2>
+
       <div className={styles.grid}>
         {fields.map((field, fIndex) => (
           <div key={field} className={styles.card}>
@@ -90,34 +93,36 @@ export default function Home() {
           </div>
         ))}
       </div>
+
       <hr />
-      <h3>總積分</h3>
+
+      <h3 style={{ color: 'white' }}>總積分</h3>
       <div className={styles.points}>
         {teamPoints.map((p, i) => (
           <div key={i}>第 {i + 1} 小隊：{p} 分</div>
         ))}
       </div>
+
+      <button
+        onClick={() => {
+          if (confirm("你確定要清除所有資料嗎？這個動作無法復原！")) {
+            localStorage.clear();
+            location.reload();
+          }
+        }}
+        style={{
+          backgroundColor: 'red',
+          color: 'white',
+          fontSize: '18px',
+          padding: '10px 20px',
+          border: 'none',
+          borderRadius: '5px',
+          marginTop: '40px',
+          cursor: 'pointer'
+        }}
+      >
+        🔄 初始化所有成績
+      </button>
     </div>
   )
 }
-
-<button
-  onClick={() => {
-    if (confirm("你確定要清除所有資料嗎？這個動作無法復原！")) {
-      localStorage.clear();
-      location.reload();
-    }
-  }}
-  style={{
-    backgroundColor: 'red',
-    color: 'white',
-    fontSize: '18px',
-    padding: '10px 20px',
-    border: 'none',
-    borderRadius: '5px',
-    marginTop: '40px',
-    cursor: 'pointer'
-  }}
->
-  { "🔄 初始化所有成績" }
-</button>
