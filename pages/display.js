@@ -24,18 +24,16 @@ const dummyRankings = games.map((name, index) => ({
 
 export default function DisplayPage() {
   const [pageIndex, setPageIndex] = useState(0)
-
   const pages = []
   for (let i = 0; i < dummyRankings.length; i += 2) {
     pages.push(dummyRankings.slice(i, i + 2))
   }
 
   useEffect(() => {
-    const totalPages = pages.length + 1 // +1 是總覽頁
+    const totalPages = pages.length + 1
     const interval = setInterval(() => {
       setPageIndex(prev => (prev + 1) % totalPages)
     }, pageIndex === 0 ? 15000 : 7000)
-
     return () => clearInterval(interval)
   }, [pageIndex])
 
