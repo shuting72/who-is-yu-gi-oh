@@ -119,6 +119,6 @@ export default function Home() {
     cursor: 'pointer',
   }}
 >
-  🔄 初始化所有成績
+  {"🔄 初始化所有成績"}
 </button>
 
