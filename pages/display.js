@@ -10,9 +10,9 @@ const games = [
 
 const icons = ['💾', '🔔', '🩴', '🎵', '🏴‍☠️', '📏', '⏰', '👁️', '🕶️', '❌', '🍔', '🏹', '🌂', '🧱', '🤖', '⚡']
 
-const dummyRankings = games.map((name, i) => ({
+const dummyRankings = games.map((name, index) => ({
   name,
-  icon: icons[i],
+  icon: icons[index],
   scores: [
     { name: '小明', score: '50次' },
     { name: '阿花', score: '48次' },
@@ -24,17 +24,18 @@ const dummyRankings = games.map((name, i) => ({
 
 export default function DisplayPage() {
   const [pageIndex, setPageIndex] = useState(0)
-  const pages = []
 
+  const pages = []
   for (let i = 0; i < dummyRankings.length; i += 2) {
     pages.push(dummyRankings.slice(i, i + 2))
   }
 
   useEffect(() => {
-    const total = pages.length + 1
+    const totalPages = pages.length + 1 // +1 是總覽頁
     const interval = setInterval(() => {
-      setPageIndex(prev => (prev + 1) % total)
+      setPageIndex(prev => (prev + 1) % totalPages)
     }, pageIndex === 0 ? 15000 : 7000)
+
     return () => clearInterval(interval)
   }, [pageIndex])
 
@@ -43,7 +44,7 @@ export default function DisplayPage() {
       {pageIndex === 0 ? (
         <div className={styles.grid}>
           {dummyRankings.map((game, i) => (
-            <div className={styles.gridItem} key={i}>
+            <div className={`${styles.card} ${styles['color' + (i % 10)]}`} key={i}>
               <div className={styles.title}>{game.icon} {game.name}</div>
               <div className={styles.score}>成績：--</div>
               <div className={styles.champion}>👑 --</div>
@@ -51,14 +52,14 @@ export default function DisplayPage() {
           ))}
         </div>
       ) : (
-        <div className={styles.pageWrapper}>
-          {pages[pageIndex - 1].map((game, i) => (
-            <div className={styles.rankBlock} key={i}>
-              <div className={styles.rankTitle}>{game.icon} {game.name}</div>
-              <ol className={styles.rankList}>
-                {game.scores.map((s, idx) => (
-                  <li key={idx}>
-                    <span className={styles.rankIcon}>{['🥇', '🥈', '🥉', '4️⃣', '5️⃣'][idx]}</span>
+        <div className={styles.rankingRow}>
+          {pages[pageIndex - 1].map((game, gidx) => (
+            <div className={styles.rankingBlock} key={gidx}>
+              <div className={styles.rankingTitle}>{game.icon} {game.name}</div>
+              <ol className={styles.rankingList}>
+                {game.scores.map((s, i) => (
+                  <li key={i}>
+                    <span className={styles.rankIcon}>{['🥇', '🥈', '🥉', '4️⃣', '5️⃣'][i]}</span>
                     <span className={styles.rankText}>{s.name} - {s.score}</span>
                   </li>
                 ))}
