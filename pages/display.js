@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import styles from '../styles/display.module.css'
 
 const fields = [
-  'USB王', '跳高王', '攤筷王', '高音王',
+  'USB王', '跳高王', '擲筊王', '高音王',
   '海賊王', '下腰王', '準時王', '乾眼王',
   '色盲王', '錯王', '蟹堡王', '神射王',
   '搧大王', '守門王', '定格王', '反應王',
