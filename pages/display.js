@@ -1,58 +1,43 @@
-import styles from '../styles/display.module.css';
-import { useEffect, useState } from 'react';
+import styles from "../styles/display.module.css";
+import { useEffect, useState } from "react";
 
 const stages = [
-  "USB王", "跳高王", "擲筊王", "高音王",
-  "海賊王", "下腰王", "準時王", "乾眼王",
-  "色盲王", "錯王", "蟹堡王", "神射王",
-  "搧大王", "守門王", "定格王", "反應王"
+  "USB王","跳高王","擲筊王","高音王",
+  "海賊王","下腰王","準時王","乾眼王",
+  "色盲王","錯王","蟹堡王","神射王",
+  "搧大王","守門王","定格王","反應王"
 ];
-
 const icons = [
-  "💾", "🔔", "🩴", "🎵",
-  "🏴‍☠️", "📏", "⏰", "👁️",
-  "🕶️", "❌", "🍔", "🎯",
-  "🪭", "🥅", "🤖", "⚡"
+  "💾","🔔","🩴","🎵",
+  "🏴‍☠️","📏","⏰","👁️",
+  "🕶️","❌","🍔","🎯",
+  "🪭","🥅","🤖","⚡"
 ];
 
-const Display = () => {
-  const [pageIndex, setPageIndex] = useState(0);
+export default function Display() {
+  const [page, setPage] = useState(0);
   const [data, setData] = useState({});
-  const [teams, setTeams] = useState({});
-
   useEffect(() => {
-    const update = () => {
-      const stored = localStorage.getItem("scoreboard");
-      if (stored) setData(JSON.parse(stored));
+    const sv = localStorage.getItem("scoreboard");
+    if (sv) setData(JSON.parse(sv));
+  }, []);
+  useEffect(() => {
+    const iv = setInterval(() => {
+      setPage((p) => (p + 1) % 9);
+    }, page === 0 ? 15000 : 7000);
+    return () => clearInterval(iv);
+  }, [page]);
 
-      const storedTeams = localStorage.getItem("teamScores");
-      if (storedTeams) setTeams(JSON.parse(storedTeams));
-    };
-    update();
-
-    const interval = setInterval(() => {
-      setPageIndex((prev) => (prev + 1) % 9);
-      update();
-    }, pageIndex === 0 ? 15000 : 7000);
-    return () => clearInterval(interval);
-  }, [pageIndex]);
-
-  const teamColors = [
-    "#ff0000", "#ff8000", "#ffff00", "#00ff00", "#008000",
-    "#00ccff", "#0000ff", "#8000ff", "#ff66cc", "#996633"
-  ];
-
-  if (pageIndex === 0) {
+  if (page === 0) {
     return (
       <div className={styles.grid}>
-        {stages.map((stage, index) => {
-          const score = data[stage]?.[0] || { name: "--", score: "--", team: "" };
-          const bg = score.team ? teamColors[parseInt(score.team) - 1] : "#ffffff";
+        {stages.map((s, i) => {
+          const top = data[s]?.[0] || { name: "--", score: "--" };
           return (
-            <div key={stage} className={styles.card} style={{ backgroundColor: bg }}>
-              <div className={styles.stageTitle}>{icons[index]} {stage}</div>
-              <div className={styles.score}>成績：{score.score}</div>
-              <div className={styles.champion}>👑 {score.name}</div>
+            <div key={s} className={styles.card}>
+              <div className={styles.stageTitle}>{icons[i]} {s}</div>
+              <div className={styles.score}>成績：{top.score}</div>
+              <div className={styles.champion}>👑 {top.name}</div>
             </div>
           );
         })}
@@ -60,18 +45,17 @@ const Display = () => {
     );
   }
 
-  const leftIndex = (pageIndex - 1) * 2;
-  const rightIndex = leftIndex + 1;
-
-  const renderBlock = (index) => {
-    const stage = stages[index];
-    const records = data[stage] || [];
+  const li = (page - 1) * 2;
+  const ri = li + 1;
+  const render = (idx) => {
+    const key = stages[idx];
+    const rec = data[key] || [];
     return (
-      <div key={stage} className={styles.block}>
-        <div className={styles.stage}>{icons[index]} {stage}</div>
-        {records.slice(0, 5).map((item, i) => (
+      <div key={key} className={styles.block}>
+        <div className={styles.stage}>{icons[idx]} {key}</div>
+        {rec.slice(0,5).map((x,i) => (
           <div key={i} className={styles.entry}>
-            {["🥇","🥈","🥉","4️⃣","5️⃣"][i]} {item.name} - {item.score}{stage.includes("秒") ? "毫秒" : stage.includes("公分") ? "公分" : stage.includes("顆") ? "顆" : "次"}
+            {["🥇","🥈","🥉","4️⃣","5️⃣"][i]} {x.name} - {x.score}{stages[idx] === "守門王" ? "顆" : ""}
           </div>
         ))}
       </div>
@@ -80,10 +64,8 @@ const Display = () => {
 
   return (
     <div className={styles.carousel}>
-      {renderBlock(leftIndex)}
-      {rightIndex < stages.length && renderBlock(rightIndex)}
+      {render(li)}
+      {ri < stages.length && render(ri)}
     </div>
   );
-};
-
-export default Display;
+}

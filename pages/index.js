@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const defaultRecords = [
+const defaultStages = [
   { name: "USB王", unit: "次" },
   { name: "跳高王", unit: "公分" },
   { name: "擲筊王", unit: "次" },
@@ -23,97 +23,112 @@ export default function Control() {
   const [records, setRecords] = useState([]);
   const [teamScores, setTeamScores] = useState({});
 
+  // 1. 取 localStorage 或初始化
   useEffect(() => {
-    const stored = localStorage.getItem("records");
-    if (stored) {
-      setRecords(JSON.parse(stored));
+    const saved = localStorage.getItem("records");
+    if (saved) {
+      setRecords(JSON.parse(saved));
     } else {
-      const initial = defaultRecords.map((r) => ({
-        name: r.name,
-        unit: r.unit,
-        ranks: Array(5).fill({ name: "", score: "", team: "" }),
-      }));
-      setRecords(initial);
+      setRecords(
+        defaultStages.map((s) => ({
+          ...s,
+          ranks: Array(5).fill({ name: "", score: "", team: "" }),
+        }))
+      );
     }
   }, []);
 
+  // 2. 每次 records 變動，重新算總表與積分
   useEffect(() => {
-    // 排序 + 儲存
-    const scoreboard = {};
-    const teamPoints = {};
+    const board = {};
+    const points = {};
 
-    records.forEach((r) => {
-      const validRanks = r.ranks.filter(x => x.name && x.score);
-      scoreboard[r.name] = validRanks;
-
-      validRanks.forEach((item, idx) => {
-        const team = item.team;
-        if (!team) return;
-        teamPoints[team] = (teamPoints[team] || 0) + (5 - idx);
+    records.forEach((s) => {
+      board[s.name] = s.ranks.filter((r) => r.name && r.score);
+      s.ranks.forEach((r, i) => {
+        if (r.team && r.score) {
+          points[r.team] = (points[r.team] || 0) + (5 - i);
+        }
       });
     });
 
-    localStorage.setItem("scoreboard", JSON.stringify(scoreboard));
-    localStorage.setItem("teamScores", JSON.stringify(teamPoints));
     localStorage.setItem("records", JSON.stringify(records));
+    localStorage.setItem("scoreboard", JSON.stringify(board));
+    localStorage.setItem("teamScores", JSON.stringify(points));
     localStorage.setItem("broadcast", Date.now());
-    setTeamScores(teamPoints);
+    setTeamScores(points);
   }, [records]);
 
-  const update = (stageIndex, rankIndex, field, value) => {
-    const updated = [...records];
-    const target = { ...updated[stageIndex].ranks[rankIndex], [field]: value };
-    updated[stageIndex].ranks[rankIndex] = target;
-    setRecords(updated);
+  const update = (si, ri, field, value) => {
+    const copy = [...records];
+    copy[si].ranks[ri] = { ...copy[si].ranks[ri], [field]: value };
+    setRecords(copy);
   };
 
+  // 切成左右兩欄各 8
+  const left = records.slice(0, 8);
+  const right = records.slice(8);
+
   return (
-    <div style={{ background: "#111", color: "#000", minHeight: "100vh", padding: "20px" }}>
-      <h2 style={{ fontSize: "28px", marginBottom: "20px" }}>控場介面</h2>
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
-        <div style={{ flex: 1, minWidth: "650px" }}>
-          {records.map((r, i) => (
-            <div key={i} style={{ marginBottom: "32px" }}>
-              <h3 style={{ color: "#fff", marginBottom: "8px" }}>{r.name}</h3>
-              {r.ranks.map((rank, j) => (
-                <div key={j} style={{ display: "flex", gap: "8px", marginBottom: "4px" }}>
-                  <div style={{ width: "24px" }}>{["🥇", "🥈", "🥉", "4️⃣", "5️⃣"][j]}</div>
-                  <input
-                    value={rank.name}
-                    onChange={(e) => update(i, j, "name", e.target.value)}
-                    placeholder="記錄保持人"
-                    style={{ padding: "6px", width: "150px" }}
-                  />
-                  <input
-                    value={rank.score}
-                    onChange={(e) => update(i, j, "score", e.target.value)}
-                    placeholder={`成績（${r.unit}）`}
-                    style={{ padding: "6px", width: "150px" }}
-                  />
-                  <select
-                    value={rank.team}
-                    onChange={(e) => update(i, j, "team", e.target.value)}
-                    style={{ padding: "6px", width: "120px" }}
-                  >
-                    <option value="">未選擇小隊</option>
-                    {[...Array(10)].map((_, t) => (
-                      <option key={t + 1} value={t + 1}>第 {t + 1} 小隊</option>
-                    ))}
-                  </select>
-                </div>
-              ))}
-              <hr style={{ marginTop: "16px", borderColor: "#333" }} />
-            </div>
-          ))}
-        </div>
-        <div style={{ width: "240px", marginLeft: "40px", color: "white" }}>
-          <h3>🏆 各隊總積分</h3>
-          {[...Array(10)].map((_, i) => (
-            <div key={i}>
-              第 {i + 1} 小隊：{teamScores[i + 1] || 0} 分
-            </div>
-          ))}
-        </div>
+    <div style={{ background: "#111", color: "#fff", padding: 24, minHeight: "100vh" }}>
+      <h2 style={{ color: "#fff", fontSize: 28, marginBottom: 16 }}>控場介面</h2>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 48,
+          marginBottom: 32,
+        }}
+      >
+        {[left, right].map((col, colIdx) => (
+          <div key={colIdx}>
+            {col.map((stage, si) => (
+              <div key={si} style={{ marginBottom: 24 }}>
+                <h3 style={{ color: "#fff", marginBottom: 8 }}>{stage.name}</h3>
+                {stage.ranks.map((r, ri) => (
+                  <div key={ri} style={{ display: "flex", gap: 8, marginBottom: 4 }}>
+                    <div style={{ width: 24 }}>{["🥇", "🥈", "🥉", "4️⃣", "5️⃣"][ri]}</div>
+                    <input
+                      placeholder="記錄保持人"
+                      value={r.name}
+                      onChange={(e) => update(colIdx * 8 + si, ri, "name", e.target.value)}
+                      style={{ flex: 1, padding: 6 }}
+                    />
+                    <input
+                      placeholder={`成績（${stage.unit}）`}
+                      value={r.score}
+                      onChange={(e) => update(colIdx * 8 + si, ri, "score", e.target.value)}
+                      style={{ width: 140, padding: 6 }}
+                    />
+                    <select
+                      value={r.team}
+                      onChange={(e) => update(colIdx * 8 + si, ri, "team", e.target.value)}
+                      style={{ width: 120, padding: 6 }}
+                    >
+                      <option value="">未選擇小隊</option>
+                      {[...Array(10)].map((_, t) => (
+                        <option key={t + 1} value={t + 1}>
+                          第 {t + 1} 小隊
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
+                <hr style={{ borderColor: "#333", marginTop: 16 }} />
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      <div style={{ color: "#fff", fontSize: 20 }}>
+        <h3>🏆 各隊總積分</h3>
+        {[...Array(10)].map((_, i) => (
+          <div key={i}>
+            第 {i + 1} 小隊：{teamScores[i + 1] || 0} 分
+          </div>
+        ))}
       </div>
     </div>
   );

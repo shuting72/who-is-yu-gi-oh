@@ -1,55 +1,61 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  padding: 32px;
-  background: #000;
-  color: white;
-  min-height: 100vh;
-}
-
-.card {
-  border-radius: 16px;
+  gap: 24px;
   padding: 24px;
-  box-shadow: 0 0 24px white;
+  height: 100vh;
+}
+.card {
+  background: #111;
+  border: 2px solid #fff;
+  border-radius: 12px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 24px;
-  font-weight: bold;
+  justify-content: center;
 }
-
 .stageTitle {
-  font-size: 28px;
-  margin-bottom: 8px;
+  font-size: 32px;
+  font-weight: bold;
   text-align: center;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+  margin-bottom: 12px;
 }
-
 .score, .champion {
-  font-size: 22px;
-  margin-top: 6px;
+  font-size: 24px;
+  text-align: center;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+  margin: 4px 0;
 }
 
 .carousel {
   display: flex;
-  justify-content: center;
+  gap: 48px;
+  padding: 48px;
+  height: 100vh;
   align-items: center;
-  gap: 80px;
-  background: #000;
-  color: white;
-  min-height: 100vh;
-  padding: 64px;
+  justify-content: center;
 }
-
 .block {
-  border: 3px solid white;
+  background: #111;
+  border: 2px solid #fff;
   border-radius: 12px;
-  padding: 36px;
-  width: 400px;
-  font-size: 28px;
+  padding: 32px;
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-
-.entry {
-  margin-top: 16px;
+.block .stage {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+  margin-bottom: 12px;
+}
+.block .entry {
   font-size: 24px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+  margin: 6px 0;
 }
