@@ -1,6 +1,12 @@
-
 .container {
-  @apply w-screen h-screen bg-black text-white flex items-center justify-center overflow-hidden;
+  background: black;
+  color: white;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .grid {
@@ -8,66 +14,73 @@
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(4, 1fr);
   gap: 1rem;
-  padding: 1rem;
   width: 100%;
   height: 100%;
+  padding: 1rem;
   box-sizing: border-box;
 }
 
-.card {
-  @apply flex flex-col items-center justify-center rounded-none font-bold text-xl text-white shadow-lg;
-  width: 100%;
+.cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   aspect-ratio: 1 / 1;
-  box-shadow: 0 0 18px 6px white;
+  background: #f00;
+  color: white;
+  font-size: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0 20px white;
 }
 
 .title {
-  @apply text-2xl font-bold mb-1 drop-shadow-lg;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
 }
 
-.score {
-  @apply text-lg font-semibold drop-shadow-sm;
-}
-
-.champion {
-  @apply text-lg drop-shadow-sm;
+.score, .champion {
+  margin-top: 0.5rem;
+  font-size: 1.4rem;
+  text-align: center;
 }
 
 .rankingRow {
-  @apply flex justify-center items-center w-full h-full gap-12 bg-black text-white p-10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+  height: 100%;
 }
 
 .rankingBlock {
-  @apply bg-zinc-900 rounded-xl p-10 shadow-xl text-white;
-  width: 38%;
-  min-width: 320px;
-  box-shadow: 0 0 25px 10px white;
+  background: #1c1c1c;
+  border-radius: 1rem;
+  padding: 2rem 3rem;
+  box-shadow: 0 0 30px white;
+  text-align: center;
+  flex: 1;
+  max-width: 40%;
 }
 
 .rankingTitle {
-  @apply text-3xl font-bold mb-6 flex justify-center items-center gap-2;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
 }
 
 .rankingList {
-  @apply list-none pl-0 text-xl font-medium text-white;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 1.8rem;
 }
 
 .rankIcon {
-  @apply mr-2;
+  margin-right: 0.5rem;
 }
 
 .rankText {
-  @apply inline-block;
+  font-size: 1.6rem;
 }
-
-/* 固定十種顏色，用於不同關卡預設顏色 */
-.color0 { background-color: #f44336; }
-.color1 { background-color: #ff9800; }
-.color2 { background-color: #ffeb3b; color: #000; }
-.color3 { background-color: #4caf50; }
-.color4 { background-color: #2196f3; }
-.color5 { background-color: #3f51b5; }
-.color6 { background-color: #9c27b0; }
-.color7 { background-color: #e91e63; }
-.color8 { background-color: #9e9e9e; }
-.color9 { background-color: #00bcd4; }
