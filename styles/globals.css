@@ -1,3 +1,112 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.screen {
+  background: black;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  box-shadow: inset 0 0 8px #000;
+  color: white;
+  text-shadow: 2px 2px 4px black;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.score,
+.champion {
+  font-size: 1.8rem;
+}
+
+/* 10 顏色樣式 */
+.color0 { background: #e53935; }
+.color1 { background: #fb8c00; }
+.color2 { background: #fdd835; }
+.color3 { background: #43a047; }
+.color4 { background: #1e88e5; }
+.color5 { background: #3949ab; }
+.color6 { background: #8e24aa; }
+.color7 { background: #f06292; }
+.color8 { background: #6d4c41; }
+.color9 { background: #eeeeee; color: black; }
+
+/* 排行榜頁面樣式 */
+.rankingPage {
+  display: flex;
+  gap: 5%;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.rankBlock {
+  background: #1c1c1c;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 0 25px white;
+  flex: 0 0 40%;
+}
+
+.rankTitle {
+  font-size: 2.8rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: white;
+  text-shadow: 2px 2px 4px black;
+}
+
+.rankList {
+  list-style: none;
+  padding: 0;
+  color: white;
+  font-size: 2rem;
+}
+
+.rankItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  text-shadow: 1px 1px 2px black;
+}
+
+.rankIcon {
+  font-size: 2rem;
+}
+
+body {
+  margin: 0;
+  background: #000;
+  color: white;
+  font-family: sans-serif;
+}
+
+h2, h3 {
+  color: white;
+}
