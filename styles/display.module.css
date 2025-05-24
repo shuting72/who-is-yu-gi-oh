@@ -2,10 +2,6 @@
   @apply w-full h-screen bg-black text-white flex items-center justify-center overflow-hidden;
 }
 
-.grid {
-  @apply grid grid-cols-4 grid-rows-4 gap-4 p-4 w-full h-full box-border;
-}
-
 .card {
   @apply flex flex-col items-center justify-center rounded-xl shadow-lg;
   width: 100%;
