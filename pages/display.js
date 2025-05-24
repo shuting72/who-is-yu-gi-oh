@@ -15,25 +15,13 @@ const icons = [
   "🪭", "🥅", "🤖", "⚡"
 ];
 
-const teamColors = [
-  "#ff0000", "#ff7f00", "#ffff00", "#00ff00", "#007f00",
-  "#00ccff", "#0000ff", "#8000ff", "#ff66cc", "#a0522d"
-];
-
 const Display = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [data, setData] = useState({});
 
   useEffect(() => {
-    const fetchData = () => {
-      const stored = localStorage.getItem("scoreboard");
-      if (stored) {
-        setData(JSON.parse(stored));
-      }
-    };
-    fetchData();
-    const intervalId = setInterval(fetchData, 1000);
-    return () => clearInterval(intervalId);
+    const saved = localStorage.getItem("scoreboard");
+    if (saved) setData(JSON.parse(saved));
   }, []);
 
   useEffect(() => {
@@ -47,14 +35,13 @@ const Display = () => {
     return (
       <div className={styles.grid}>
         {stages.map((stage, index) => {
-          const record = data[stage]?.[0] || { name: "--", score: "--", team: "" };
-          const teamIndex = parseInt(record.team) - 1;
-          const bgColor = teamColors[teamIndex] || "white";
+          const score = data[stage]?.[0] || { name: "--", score: "--" };
+          const teamColor = getColorByTeam(data[stage]?.[0]?.team);
           return (
-            <div key={stage} className={styles.card} style={{ backgroundColor: bgColor }}>
+            <div key={stage} className={styles.card} style={{ backgroundColor: teamColor }}>
               <div className={styles.stageTitle}>{icons[index]} {stage}</div>
-              <div className={styles.score}>成績：{record.score}</div>
-              <div className={styles.champion}>👑 {record.name}</div>
+              <div className={styles.score}>成績：{score.score}</div>
+              <div className={styles.champion}>👑 {score.name}</div>
             </div>
           );
         })}
@@ -68,12 +55,14 @@ const Display = () => {
   const renderBlock = (index) => {
     const stage = stages[index];
     const records = data[stage] || [];
+    const unit = records.unit || getUnit(stage);
+
     return (
       <div key={stage} className={styles.block}>
         <div className={styles.stage}>{icons[index]} {stage}</div>
         {records.slice(0, 5).map((item, i) => (
           <div key={i} className={styles.entry}>
-            {["🥇", "🥈", "🥉", "4️⃣", "5️⃣"][i]} {item.name} - {item.score}{item.unit || ""}
+            {["🥇", "🥈", "🥉", "4️⃣", "5️⃣"][i]} {item.name} - {item.score}{unit}
           </div>
         ))}
       </div>
@@ -86,6 +75,24 @@ const Display = () => {
       {rightIndex < stages.length && renderBlock(rightIndex)}
     </div>
   );
+};
+
+const getUnit = (name) => {
+  const map = {
+    "USB王": "次", "跳高王": "公分", "擲筊王": "次", "高音王": "音",
+    "海賊王": "分", "下腰王": "公分", "準時王": "秒", "乾眼王": "秒",
+    "色盲王": "題", "錯王": "題", "蟹堡王": "題", "神射王": "個",
+    "搧大王": "個", "守門王": "顆", "定格王": "公分", "反應王": "毫秒"
+  };
+  return map[name] || "";
+};
+
+const getColorByTeam = (team) => {
+  const colors = [
+    "red", "orange", "yellow", "lime", "#006400", // 深綠
+    "#00ccff", "#0000cc", "purple", "deeppink", "brown"
+  ];
+  return colors[parseInt(team) - 1] || "white";
 };
 
 export default Display;
