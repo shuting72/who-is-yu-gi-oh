@@ -43,7 +43,7 @@ export default function DisplayPage() {
       {pageIndex === 0 ? (
         <div className={styles.grid}>
           {dummyRankings.map((game, i) => (
-            <div className={styles.card} key={i}>
+            <div className={`${styles.card} ${styles['color' + (i % 10)]}`} key={i}>
               <div className={styles.title}>{game.icon} {game.name}</div>
               <div className={styles.score}>成績：--</div>
               <div className={styles.champion}>👑 --</div>
