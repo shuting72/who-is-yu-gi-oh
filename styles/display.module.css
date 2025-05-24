@@ -1,75 +1,84 @@
-/* 全局背景 */
-:root {
-  --bg-black: #111;
-  --border-white: #fff;
-  --text-white: #fff;
-}
+--- a/styles/display.module.css
++++ b/styles/display.module.css
+@@ -1,9 +1,9 @@
+-/* 全局背景 */
+-:root {
+-  --bg-black: #111;
+-  --border-white: #fff;
+-  --text-white: #fff;
+-}
++/* 全局背景，去掉 :root，直接内联颜色 */
+
 /* 4×4 总表 */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 1fr;
-  gap: 16px;
-  background: var(--bg-black);
-  padding: 16px;
-  height: 100vh;             /* 整屏显示，绝对不滚动 */
-  box-sizing: border-box;
-  overflow: hidden;
-}
-.card {
-  background: #000;          /* 黑底 */
-  border: 2px solid var(--border-white);
-  border-radius: 12px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.stageTitle {
-  font-size: 48px;
-  font-weight: bold;
-  color: var(--text-white);
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-  margin-bottom: 12px;
-}
-.score, .champion {
-  font-size: 36px;
-  color: var(--text-white);
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-  margin: 4px 0;
-}
+ .grid {
+-  display: grid;
++  display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   grid-auto-rows: 1fr;
+   gap: 16px;
+   background: #111;     /* 之前 var(--bg-black) */
+@@ -12,7 +12,7 @@
+   box-sizing: border-box;
+   overflow: hidden;
+ }
+-.card { background: #000; border: 2px solid var(--border-white); }
++.card { background: #000; border: 2px solid #fff; }
+ .card {
+   border-radius: 12px;
+   padding: 24px;
+@@ -20,7 +20,7 @@
+   align-items: center;
+ }
+ .stageTitle {
+-  font-size: 48px;
+-  font-weight: bold;
+-  color: var(--text-white);
+-  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
++  font-size: 48px;
++  font-weight: bold;
++  color: #fff;
++  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+   margin-bottom: 12px;
+ }
+ .score, .champion {
+@@ -28,7 +28,7 @@
+   color: var(--text-white);
+   text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+   margin: 4px 0;
+-}
++}
 
 /* 轮播 */
-.carousel {
-  background: var(--bg-black);
-  padding: 32px;
-  display: flex;
-  gap: 48px;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  box-sizing: border-box;
-}
-.block {
-  background: #000;
-  border: 2px solid var(--border-white);
-  border-radius: 12px;
-  padding: 32px;
-  width: 40%;
-  box-sizing: border-box;
-  text-align: center;
-}
-.block .stage {
-  font-size: 48px;
-  font-weight: bold;
-  color: var(--text-white);
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-  margin-bottom: 16px;
-}
-.block .entry {
-  font-size: 36px;
-  color: var(--text-white);
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-  margin: 8px 0;
-}
+ .carousel {
+   background: #111;    /* 之前 var(--bg-black) */
+@@ -40,7 +40,7 @@
+   height: 100vh;
+   box-sizing: border-box;
+ }
+-.block { background: #000; border: 2px solid var(--border-white); }
++.block { background: #000; border: 2px solid #fff; }
+ .block {
+   border-radius: 12px;
+   padding: 32px;
+@@ -48,7 +48,7 @@
+   text-align: center;
+ }
+ .block .stage {
+-  font-size: 48px;
+-  font-weight: bold;
+-  color: var(--text-white);
+-  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
++  font-size: 48px;
++  font-weight: bold;
++  color: #fff;
++  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+   margin-bottom: 16px;
+ }
+ .block .entry {
+@@ -56,7 +56,7 @@
+   font-size: 36px;
+-  color: var(--text-white);
++  color: #fff;
+   text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+   margin: 8px 0;
+ }
