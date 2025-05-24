@@ -15,51 +15,44 @@ const icons = [
   "🪭", "🥅", "🤖", "⚡"
 ];
 
-const teamColors = ["#fff", "#ff0000", "#ff8000", "#ffff00", "#00ff00", "#008000", "#00ccff", "#0000ff", "#800080", "#ff66cc", "#a0522d"];
-
 const Display = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [data, setData] = useState({});
+  const [teams, setTeams] = useState({});
 
   useEffect(() => {
-    const updateData = () => {
-      const stored = localStorage.getItem("records");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        const grouped = {};
-        parsed.forEach(r => {
-          if (!grouped[r.name]) grouped[r.name] = [];
-          grouped[r.name].push({ name: r.holder, score: r.score, team: r.team });
-        });
-        Object.keys(grouped).forEach(key => {
-          grouped[key].sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
-        });
-        setData(grouped);
-      }
+    const update = () => {
+      const stored = localStorage.getItem("scoreboard");
+      if (stored) setData(JSON.parse(stored));
+
+      const storedTeams = localStorage.getItem("teamScores");
+      if (storedTeams) setTeams(JSON.parse(storedTeams));
     };
-    updateData();
-    const id = setInterval(updateData, 1000);
-    return () => clearInterval(id);
-  }, []);
+    update();
 
-  useEffect(() => {
     const interval = setInterval(() => {
-      setPageIndex(prev => (prev + 1) % 9);
+      setPageIndex((prev) => (prev + 1) % 9);
+      update();
     }, pageIndex === 0 ? 15000 : 7000);
     return () => clearInterval(interval);
   }, [pageIndex]);
+
+  const teamColors = [
+    "#ff0000", "#ff8000", "#ffff00", "#00ff00", "#008000",
+    "#00ccff", "#0000ff", "#8000ff", "#ff66cc", "#996633"
+  ];
 
   if (pageIndex === 0) {
     return (
       <div className={styles.grid}>
         {stages.map((stage, index) => {
-          const record = data[stage]?.[0] || { name: "--", score: "--", team: "" };
-          const bg = teamColors[parseInt(record.team) || 0];
+          const score = data[stage]?.[0] || { name: "--", score: "--", team: "" };
+          const bg = score.team ? teamColors[parseInt(score.team) - 1] : "#ffffff";
           return (
             <div key={stage} className={styles.card} style={{ backgroundColor: bg }}>
               <div className={styles.stageTitle}>{icons[index]} {stage}</div>
-              <div className={styles.score}>成績：{record.score}</div>
-              <div className={styles.champion}>👑 {record.name}</div>
+              <div className={styles.score}>成績：{score.score}</div>
+              <div className={styles.champion}>👑 {score.name}</div>
             </div>
           );
         })}
@@ -74,11 +67,11 @@ const Display = () => {
     const stage = stages[index];
     const records = data[stage] || [];
     return (
-      <div className={styles.block}>
+      <div key={stage} className={styles.block}>
         <div className={styles.stage}>{icons[index]} {stage}</div>
-        {records.slice(0, 5).map((r, i) => (
+        {records.slice(0, 5).map((item, i) => (
           <div key={i} className={styles.entry}>
-            {["🥇", "🥈", "🥉", "4️⃣", "5️⃣"][i]} {r.name} - {r.score}
+            {["🥇","🥈","🥉","4️⃣","5️⃣"][i]} {item.name} - {item.score}{stage.includes("秒") ? "毫秒" : stage.includes("公分") ? "公分" : stage.includes("顆") ? "顆" : "次"}
           </div>
         ))}
       </div>
