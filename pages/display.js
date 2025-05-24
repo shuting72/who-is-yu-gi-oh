@@ -5,15 +5,28 @@ const stages = [
   "USB王", "跳高王", "擲筊王", "高音王",
   "海賊王", "下腰王", "準時王", "乾眼王",
   "色盲王", "錯王", "蟹堡王", "神射王",
-  "搖大王", "守門王", "定格王", "反應王"
+  "搧大王", "守門王", "定格王", "反應王"
 ];
 
 const icons = [
   "💾", "🔔", "🩴", "🎵",
   "🏴‍☠️", "📏", "⏰", "👁️",
   "🕶️", "❌", "🍔", "🎯",
-  "☂️", "🧱", "🤖", "⚡"
+  "☂️", "🥅", "🤖", "⚡"
 ];
+
+const teamColors = {
+  "1": "#FF0000",
+  "2": "#FF7F00",
+  "3": "#FFFF00",
+  "4": "#00FF00",
+  "5": "#0000FF",
+  "6": "#4B0082",
+  "7": "#8B00FF",
+  "8": "#FFC0CB",
+  "9": "#A52A2A",
+  "10": "#808080"
+};
 
 const Display = () => {
   const [pageIndex, setPageIndex] = useState(0);
@@ -35,9 +48,10 @@ const Display = () => {
     return (
       <div className={styles.grid}>
         {stages.map((stage, index) => {
-          const score = data[stage]?.[0] || { name: "--", score: "--" };
+          const score = data[stage]?.[0] || { name: "--", score: "--", team: "" };
+          const bgColor = teamColors[score.team] || "#FFFFFF";
           return (
-            <div key={stage} className={styles.card} style={{ backgroundColor: data[stage]?.color || "red" }}>
+            <div key={stage} className={styles.card} style={{ backgroundColor: bgColor }}>
               <div className={styles.stageTitle}>{icons[index]} {stage}</div>
               <div className={styles.score}>成績：{score.score}</div>
               <div className={styles.champion}>👑 {score.name}</div>
