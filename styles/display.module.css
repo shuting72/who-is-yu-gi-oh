@@ -1,84 +1,80 @@
---- a/styles/display.module.css
-+++ b/styles/display.module.css
-@@ -1,9 +1,9 @@
--/* 全局背景 */
--:root {
--  --bg-black: #111;
--  --border-white: #fff;
--  --text-white: #fff;
--}
-+/* 全局背景，去掉 :root，直接内联颜色 */
+/* styles/display.module.css */
 
-/* 4×4 总表 */
- .grid {
--  display: grid;
-+  display: grid;
-   grid-template-columns: repeat(4, 1fr);
-   grid-auto-rows: 1fr;
-   gap: 16px;
-   background: #111;     /* 之前 var(--bg-black) */
-@@ -12,7 +12,7 @@
-   box-sizing: border-box;
-   overflow: hidden;
- }
--.card { background: #000; border: 2px solid var(--border-white); }
-+.card { background: #000; border: 2px solid #fff; }
- .card {
-   border-radius: 12px;
-   padding: 24px;
-@@ -20,7 +20,7 @@
-   align-items: center;
- }
- .stageTitle {
--  font-size: 48px;
--  font-weight: bold;
--  color: var(--text-white);
--  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-+  font-size: 48px;
-+  font-weight: bold;
-+  color: #fff;
-+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-   margin-bottom: 12px;
- }
- .score, .champion {
-@@ -28,7 +28,7 @@
-   color: var(--text-white);
-   text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-   margin: 4px 0;
--}
-+}
+/** 
+ * 4×4 总表
+ * 背景 #111 (深灰/近黑)，每个格子底色 #222，白边框，白字加阴影
+ **/
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, auto);
+  gap: 16px;
+  background-color: #111;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 16px;
+}
+.card {
+  background-color: #222;
+  border: 2px solid #fff;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.stageTitle {
+  font-size: 2.5rem;           /* 加大關卡名稱 */
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+  margin-bottom: 12px;
+}
+.score,
+.champion {
+  font-size: 1.5rem;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+  margin: 4px 0;
+}
 
-/* 轮播 */
- .carousel {
-   background: #111;    /* 之前 var(--bg-black) */
-@@ -40,7 +40,7 @@
-   height: 100vh;
-   box-sizing: border-box;
- }
--.block { background: #000; border: 2px solid var(--border-white); }
-+.block { background: #000; border: 2px solid #fff; }
- .block {
-   border-radius: 12px;
-   padding: 32px;
-@@ -48,7 +48,7 @@
-   text-align: center;
- }
- .block .stage {
--  font-size: 48px;
--  font-weight: bold;
--  color: var(--text-white);
--  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-+  font-size: 48px;
-+  font-weight: bold;
-+  color: #fff;
-+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-   margin-bottom: 16px;
- }
- .block .entry {
-@@ -56,7 +56,7 @@
-   font-size: 36px;
--  color: var(--text-white);
-+  color: #fff;
-   text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-   margin: 8px 0;
- }
+/** 
+ * 上下一組 2×1 輪播頁 
+ * 同樣黑底白框白字，字體再稍大一點
+ **/
+.carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #111;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 16px;
+}
+.block {
+  background-color: #222;
+  border: 2px solid #fff;
+  border-radius: 12px;
+  padding: 32px;
+  margin: 0 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.stage {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+  margin-bottom: 16px;
+}
+.entry {
+  font-size: 1.5rem;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+  margin: 8px 0;
+}
