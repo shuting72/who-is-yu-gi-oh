@@ -1,80 +1,66 @@
-
-.container {
-  @apply w-screen h-screen bg-black text-white overflow-hidden;
-}
-
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(4, 1fr);
-  gap: 0.5rem;
-  padding: 1rem;
+  gap: 16px;
+  padding: 24px;
+  width: 100vw;
+  height: 100vh;
   box-sizing: border-box;
+  background: black;
 }
 
 .card {
-  @apply flex flex-col items-center justify-center rounded-xl text-white;
-  font-size: 1.8rem;
-  font-weight: bold;
-}
-
-.card .score,
-.card .champion {
-  font-size: 1.3rem;
-  font-weight: normal;
-}
-
-.color0 { background-color: #ef4444; } /* Red */
-.color1 { background-color: #f59e0b; } /* Orange */
-.color2 { background-color: #facc15; } /* Yellow */
-.color3 { background-color: #22c55e; } /* Green */
-.color4 { background-color: #3b82f6; } /* Blue */
-.color5 { background-color: #4338ca; } /* Indigo */
-.color6 { background-color: #a855f7; } /* Purple */
-.color7 { background-color: #ec4899; } /* Pink */
-.color8 { background-color: #f472b6; } /* Rose */
-.color9 { background-color: #6b7280; } /* Gray */
-
-.rankingRow {
-  @apply flex justify-center items-center w-full h-screen gap-10;
-}
-
-.rankingBlock {
-  background-color: #1f1f1f;
-  border: 4px solid white;
-  padding: 3rem 4rem;
-  border-radius: 1rem;
-  width: 32%;
-  font-size: 2rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
-
-.rankingTitle {
-  font-size: 2.8rem;
-  font-weight: bold;
-  margin-bottom: 2rem;
-}
-
-.rankingList {
-  list-style: none;
-  padding: 0;
-  width: 100%;
-}
-
-.rankingList li {
-  margin: 0.8rem 0;
-  display: flex;
-  align-items: center;
   justify-content: center;
-}
-
-.rankIcon {
-  margin-right: 1rem;
-  font-size: 2rem;
-}
-
-.rankText {
+  align-items: center;
+  border-radius: 12px;
+  padding: 16px;
+  color: white;
   font-size: 1.8rem;
+}
+
+.stageTitle {
+  font-size: 2.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 8px;
+  text-shadow: 2px 2px 4px #000;
+}
+
+.score, .champion {
+  font-size: 1.6rem;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: black;
+  gap: 64px;
+  padding: 0 48px;
+}
+
+.block {
+  background: #1e1e1e;
+  color: white;
+  border: 4px solid white;
+  border-radius: 16px;
+  padding: 32px 48px;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.stage {
+  font-size: 2.4rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.entry {
+  margin: 8px 0;
+  font-size: 2rem;
 }
