@@ -116,9 +116,8 @@ export default function Home() {
     border: 'none',
     borderRadius: '5px',
     marginTop: '40px',
-    cursor: 'pointer',
+    cursor: 'pointer'
   }}
 >
-  {"🔄 初始化所有成績"}
+  🔄初始化所有成績
 </button>
-
