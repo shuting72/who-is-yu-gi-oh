@@ -100,3 +100,25 @@ export default function Home() {
     </div>
   )
 }
+
+<button
+  onClick={() => {
+    if (confirm("你確定要清除所有資料嗎？這個動作無法復原！")) {
+      localStorage.clear();
+      location.reload();
+    }
+  }}
+  style={{
+    backgroundColor: 'red',
+    color: 'white',
+    fontSize: '18px',
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '5px',
+    marginTop: '40px',
+    cursor: 'pointer',
+  }}
+>
+  🔄 初始化所有成績
+</button>
+
