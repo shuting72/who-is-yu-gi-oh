@@ -41,7 +41,7 @@ export default function DisplayPage() {
   return (
     <div className={styles.container}>
       {pageIndex === 0 ? (
-        <div className={styles.grid}>
+        <div className="grid grid-cols-4 grid-rows-4 gap-4 p-4 w-full h-full box-border">
           {dummyRankings.map((game, i) => (
             <div className={`${styles.card} ${styles['color' + (i % 10)]}`} key={i}>
               <div className={styles.title}>{game.icon} {game.name}</div>
