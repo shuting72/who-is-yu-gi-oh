@@ -1,63 +1,72 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  padding: 24px;
-  background: black;
-  min-height: 100vh;
+  gap: 20px;
+  padding: 20px;
+  background-color: black;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .card {
   background-color: white;
-  padding: 16px;
+  padding: 20px;
   border-radius: 12px;
-  text-align: center;
-  color: white;
-  box-shadow: 0 0 12px white;
-  font-size: 24px;
+  box-shadow: 0 0 20px white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1 / 1;
 }
 
 .stageTitle {
-  font-weight: bold;
   font-size: 28px;
-  margin-bottom: 8px;
+  font-weight: bold;
+  color: white;
   text-shadow: 2px 2px black;
+  margin-bottom: 10px;
 }
 
-.score, .champion {
+.score {
+  font-size: 24px;
+  color: white;
+  text-shadow: 1px 1px black;
+}
+
+.champion {
   font-size: 20px;
   margin-top: 6px;
-  text-shadow: 2px 2px black;
+  color: white;
+  text-shadow: 1px 1px black;
 }
 
 .carousel {
+  background-color: black;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 64px;
-  padding: 40px;
-  background: black;
-  min-height: 100vh;
+  height: 100vh;
+  gap: 100px;
 }
 
 .block {
-  border: 3px solid white;
+  border: 2px solid white;
   padding: 30px;
-  width: 420px;
-  background: #222;
+  border-radius: 12px;
   color: white;
-  border-radius: 14px;
+  width: 30%;
+  text-align: center;
+  font-size: 28px;
 }
 
 .stage {
-  font-size: 36px;
+  font-size: 32px;
   font-weight: bold;
   margin-bottom: 20px;
-  text-align: center;
 }
 
 .entry {
-  font-size: 28px;
-  margin-bottom: 10px;
-  text-align: left;
+  font-size: 24px;
+  margin: 10px 0;
 }
