@@ -1,65 +1,60 @@
 /* styles/display.module.css */
 
-/** 
- * 4×4 总表
- * 背景 #111 (深灰/近黑)，每个格子底色 #222，白边框，白字加阴影
- **/
+/* ===== 總表 4×4 ===== */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, auto);
-  gap: 16px;
-  background-color: #111;
+  grid-template-rows: repeat(4, 1fr);
+  gap: 8px;
   width: 100vw;
   height: 100vh;
+  padding: 8px;
+  margin: 0;
+  background-color: #111;
   box-sizing: border-box;
-  padding: 16px;
 }
 .card {
   background-color: #222;
   border: 2px solid #fff;
-  border-radius: 12px;
-  padding: 24px;
+  border-radius: 8px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 .stageTitle {
-  font-size: 2.5rem;           /* 加大關卡名稱 */
+  font-size: 2rem;
   font-weight: bold;
   color: #fff;
   text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
-.score,
-.champion {
-  font-size: 1.5rem;
+.score, .champion {
+  font-size: 1.2rem;
   color: #fff;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
   margin: 4px 0;
 }
 
-/** 
- * 上下一組 2×1 輪播頁 
- * 同樣黑底白框白字，字體再稍大一點
- **/
+/* ===== 輪播 2欄 ===== */
 .carousel {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #111;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 16px;
   width: 100vw;
   height: 100vh;
-  box-sizing: border-box;
   padding: 16px;
+  margin: 0;
+  background-color: #111;
+  box-sizing: border-box;
 }
 .block {
   background-color: #222;
   border: 2px solid #fff;
-  border-radius: 12px;
-  padding: 32px;
-  margin: 0 16px;
+  border-radius: 8px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,11 +65,11 @@
   font-weight: bold;
   color: #fff;
   text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 .entry {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: #fff;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-  margin: 8px 0;
+  margin: 6px 0;
 }
