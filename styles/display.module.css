@@ -1,1 +1,74 @@
-/* 修改後的 CSS 內容將放在此處 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 40px;
+  width: 100%;
+  height: 100vh;
+  background: black;
+  color: white;
+  box-sizing: border-box;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  font-size: 24px;
+  box-shadow: none;
+}
+
+.stageTitle {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-shadow: 2px 2px 5px black;
+}
+
+.score {
+  font-size: 20px;
+  margin-bottom: 4px;
+  text-shadow: 2px 2px 5px black;
+}
+
+.champion {
+  font-size: 18px;
+  text-shadow: 2px 2px 5px black;
+}
+
+.carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  height: 100vh;
+  background: black;
+  color: white;
+  padding: 40px;
+}
+
+.block {
+  border: 3px solid white;
+  border-radius: 16px;
+  padding: 40px;
+  width: 480px;
+  background: #1e1e1e;
+}
+
+.stage {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.entry {
+  font-size: 28px;
+  margin: 12px 0;
+  text-align: left;
+}
