@@ -1,1 +1,104 @@
-/* updated display.module.css will be inserted here */
+.container {
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  color: white;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 20px;
+  width: 95vw;
+  height: 95vh;
+  box-sizing: border-box;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 2.4rem;
+  font-weight: bold;
+  box-shadow: 0 0 25px white;
+  color: white;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.6rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px black;
+}
+
+.score, .champion {
+  font-size: 1.8rem;
+  margin-top: 0.3rem;
+  text-shadow: 1px 1px 3px black;
+}
+
+/* 排行榜輪播區塊 */
+
+.rankingPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8vw;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+}
+
+.rankingBlock {
+  background: #1a1a1a;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 30px white;
+  width: 32vw;
+  min-height: 65vh;
+}
+
+.rankingTitle {
+  font-size: 2.8rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: white;
+  text-shadow: 2px 2px 6px black;
+}
+
+.rankingList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 2.2rem;
+}
+
+.rankIcon {
+  margin-right: 0.8rem;
+}
+
+.rankText {
+  font-size: 2.2rem;
+  text-shadow: 1px 1px 3px black;
+}
+
+/* 顏色分類 */
+
+.color0 { background-color: #ff4c4c; }
+.color1 { background-color: #ffa500; }
+.color2 { background-color: #ffff33; color: black; }
+.color3 { background-color: #33cc66; }
+.color4 { background-color: #3399ff; }
+.color5 { background-color: #3333cc; }
+.color6 { background-color: #9933cc; }
+.color7 { background-color: #ff3399; }
+.color8 { background-color: #ff99cc; }
+.color9 { background-color: #999999; }
