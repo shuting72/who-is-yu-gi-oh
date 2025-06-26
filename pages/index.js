@@ -33,21 +33,21 @@ export default function Home() {
     })
   }, [])
 
-  // ✅ 當輸入時即時寫入 Firebase
   const handleChange = (field, index, key, value) => {
-    setData(prev => {
-      const updated = { ...prev }
-      updated[field] = updated[field] || Array(5).fill({ name: '', score: '', team: '' })
-      updated[field][index] = {
-        ...updated[field][index],
-        [key]: value
-      }
+  setData(prev => {
+    const updated = { ...prev }
+    updated[field] = updated[field] || Array(5).fill({ name: '', score: '', team: '' })
+    updated[field][index] = {
+      ...updated[field][index],
+      [key]: value
+    }
 
-      // ⚠️ 即時更新 Firebase
-      set(ref(database, 'scoreData'), updated)
-      return updated
-    })
-  }
+    // ✅ 僅更新這一關資料，不會覆蓋整份資料
+    set(ref(database, `scoreData/${field}`), updated[field])
+    return updated
+  })
+}
+
 
   // 計算各隊總積分
   const teamPoints = Array(10).fill(0)
