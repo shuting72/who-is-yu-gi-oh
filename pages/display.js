@@ -3,6 +3,10 @@
 import { useEffect, useState } from 'react'
 import styles from '../styles/display.module.css'
 
+// ✅ 匯入 Firebase
+import { ref, onValue } from 'firebase/database'
+import { database } from '../firebase'
+
 const fields = [
   'USB王', '跳高王', '擲筊王', '高音王',
   '海賊王', '下腰王', '準時王', '乾眼王',
@@ -18,7 +22,7 @@ const icons = [
 ]
 
 const units = [
-  '次', '公分', '次', '音',
+  '秒', '公分', '次', '音',
   '分', '公分', '秒', '秒',
   '題', '題', '題', '個',
   '個', '顆', '公分', '毫秒'
@@ -34,6 +38,7 @@ export default function Display() {
   const [data, setData] = useState({})
   const [page, setPage] = useState(0)
 
+  // ✅ 每幾秒切換頁面
   useEffect(() => {
     const interval = setInterval(() => {
       setPage(p => (p + 1) % 9)
@@ -41,12 +46,17 @@ export default function Display() {
     return () => clearInterval(interval)
   }, [page])
 
+  // ✅ 從 Firebase 即時讀取資料
   useEffect(() => {
-    const stored = localStorage.getItem('scoreData')
-    if (stored) setData(JSON.parse(stored))
+    const dbRef = ref(database, 'scoreData')
+    return onValue(dbRef, (snapshot) => {
+      const value = snapshot.val()
+      if (value) setData(value)
+    })
   }, [])
 
   if (page === 0) {
+    // 總覽畫面（16 格）
     return (
       <div className={styles.grid16}>
         {fields.map((field, i) => {
@@ -65,6 +75,7 @@ export default function Display() {
     )
   }
 
+  // 單關排行榜輪播畫面
   const pair = [(page - 1) * 2, (page - 1) * 2 + 1]
 
   return (

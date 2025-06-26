@@ -3,6 +3,10 @@
 import { useState, useEffect } from 'react'
 import styles from '../styles/display.module.css'
 
+// ✅ 匯入 Firebase
+import { ref, set, onValue } from 'firebase/database'
+import { database } from '../firebase'
+
 const fields = [
   'USB王', '跳高王', '擲筊王', '高音王',
   '海賊王', '下腰王', '準時王', '乾眼王',
@@ -20,17 +24,16 @@ const units = [
 export default function Home() {
   const [data, setData] = useState({})
 
+  // ✅ 從 Firebase 讀取資料
   useEffect(() => {
-    const stored = localStorage.getItem('scoreData')
-    if (stored) setData(JSON.parse(stored))
+    const dbRef = ref(database, 'scoreData')
+    return onValue(dbRef, (snapshot) => {
+      const value = snapshot.val()
+      if (value) setData(value)
+    })
   }, [])
 
-  useEffect(() => {
-    localStorage.setItem('scoreData', JSON.stringify(data))
-    localStorage.setItem("scoreboard", JSON.stringify(data))  // ← 這行確保同步給投影畫面用
-    localStorage.setItem("broadcast", Date.now())              // ← 這行確保畫面即時更新
-  }, [data])
-
+  // ✅ 當輸入時即時寫入 Firebase
   const handleChange = (field, index, key, value) => {
     setData(prev => {
       const updated = { ...prev }
@@ -39,10 +42,14 @@ export default function Home() {
         ...updated[field][index],
         [key]: value
       }
+
+      // ⚠️ 即時更新 Firebase
+      set(ref(database, 'scoreData'), updated)
       return updated
     })
   }
 
+  // 計算各隊總積分
   const teamPoints = Array(10).fill(0)
   fields.forEach(field => {
     if (data[field]) {
@@ -106,8 +113,7 @@ export default function Home() {
       <button
         onClick={() => {
           if (confirm("你確定要清除所有資料嗎？這個動作無法復原！")) {
-            localStorage.clear();
-            location.reload();
+            set(ref(database, 'scoreData'), {}) // 清空 Firebase 資料
           }
         }}
         style={{
