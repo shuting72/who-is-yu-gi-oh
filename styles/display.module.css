@@ -1,22 +1,27 @@
+/* ✅ 控場主區塊可上下滾動 */
 .admin {
   padding: 20px;
+  height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
-.admin {
-  padding: 20px;
-}
-
+/* ✅ 自適應欄數：手機 1、平板 2～3、電腦 4 */
 .grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
 }
 
+/* ✅ 卡片寬度由 grid 控制，不再寫死百分比 */
 .card {
-  width: 48%;
-  margin-bottom: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
+/* 排列輸入列 */
 .row {
   display: flex;
   gap: 10px;
@@ -38,6 +43,7 @@
   margin-top: 10px;
 }
 
+/* ✅ 投影用的 16 格總覽 */
 .grid16 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
