@@ -38,7 +38,7 @@ export default function Display() {
   const [data, setData] = useState({})
   const [page, setPage] = useState(0)
 
-  // ✅ 每幾秒切換頁面
+  // ✅ 每幾秒切換畫面
   useEffect(() => {
     const interval = setInterval(() => {
       setPage(p => (p + 1) % 9)
@@ -46,17 +46,24 @@ export default function Display() {
     return () => clearInterval(interval)
   }, [page])
 
-  // ✅ 從 Firebase 即時讀取資料
+  // ✅ 從 Firebase 讀取資料並即時更新
   useEffect(() => {
     const dbRef = ref(database, 'scoreData')
-    return onValue(dbRef, (snapshot) => {
+    const unsubscribe = onValue(dbRef, (snapshot) => {
       const value = snapshot.val()
-      if (value) setData(value)
+      if (value) {
+        console.log('🎯 投影接收到 Firebase 更新', value)
+        setData(value)
+      } else {
+        setData({})
+      }
     })
+
+    return () => unsubscribe()
   }, [])
 
+  // ✅ 首頁畫面：16 格總表
   if (page === 0) {
-    // 總覽畫面（16 格）
     return (
       <div className={styles.grid16}>
         {fields.map((field, i) => {
@@ -75,7 +82,7 @@ export default function Display() {
     )
   }
 
-  // 單關排行榜輪播畫面
+  // ✅ 輪播畫面：每次顯示兩關排行榜
   const pair = [(page - 1) * 2, (page - 1) * 2 + 1]
 
   return (
