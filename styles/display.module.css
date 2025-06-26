@@ -1,41 +1,52 @@
-/* ✅ 控場主區塊可上下滾動 */
+/* 控場主區塊：可滾動 + 留白 + 滿版 */
 .admin {
   padding: 20px;
   height: 100vh;
   overflow-y: auto;
   box-sizing: border-box;
+  background-color: #000;
+  color: white;
 }
 
-/* ✅ 自適應欄數：手機 1、平板 2～3、電腦 4 */
+/* 自適應卡片排列：手機 1 欄、平板 2 欄、電腦最多 3~4 欄 */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 20px;
 }
 
-/* ✅ 卡片寬度由 grid 控制，不再寫死百分比 */
+/* 卡片本體 */
 .card {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  background-color: #111;
+  border: 2px solid #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+  box-sizing: border-box;
 }
 
-/* 排列輸入列 */
+/* 每列一行的資料欄 */
 .row {
   display: flex;
   gap: 10px;
-  margin-top: 5px;
+  margin-top: 8px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
-.row input, .row select {
+/* 所有欄位統一樣式 */
+.row input,
+.row select {
   flex: 1;
-  padding: 5px;
-  border-radius: 4px;
+  min-width: 90px;
+  padding: 6px;
+  border-radius: 6px;
   border: none;
+  background: #fff;
+  color: black;
 }
 
+/* 分數統計區 */
 .points {
   display: flex;
   flex-wrap: wrap;
@@ -43,7 +54,7 @@
   margin-top: 10px;
 }
 
-/* ✅ 投影用的 16 格總覽 */
+/* 投影畫面的 16 格總覽樣式 */
 .grid16 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -72,7 +83,8 @@
   font-size: 2.4vw;
 }
 
-.score, .name {
+.score,
+.name {
   font-size: 1.5vw;
   margin-top: 8px;
 }
