@@ -14,11 +14,12 @@ const fields = [
   '搧大王', '守門王', '定格王', '反應王',
 ]
 
+// ✅ ✅ 單位正確更新
 const units = [
-  '次', '公分', '次', '音',
+  '秒', '公分', '次', '音',
   '分', '公分', '秒', '秒',
-  '題', '題', '題', '個',
-  '個', '顆', '公分', '毫秒'
+  '題', '題', '題', '杯',
+  '杯', '顆', '公分', '毫秒'
 ]
 
 export default function Home() {
@@ -34,20 +35,19 @@ export default function Home() {
   }, [])
 
   const handleChange = (field, index, key, value) => {
-  setData(prev => {
-    const updated = { ...prev }
-    updated[field] = updated[field] || Array(5).fill({ name: '', score: '', team: '' })
-    updated[field][index] = {
-      ...updated[field][index],
-      [key]: value
-    }
+    setData(prev => {
+      const updated = { ...prev }
+      updated[field] = updated[field] || Array(5).fill({ name: '', score: '', team: '' })
+      updated[field][index] = {
+        ...updated[field][index],
+        [key]: value
+      }
 
-    // ✅ 僅更新這一關資料，不會覆蓋整份資料
-    set(ref(database, `scoreData/${field}`), updated[field])
-    return updated
-  })
-}
-
+      // ✅ 僅更新這一關資料，不會覆蓋整份資料
+      set(ref(database, `scoreData/${field}`), updated[field])
+      return updated
+    })
+  }
 
   // 計算各隊總積分
   const teamPoints = Array(10).fill(0)
@@ -90,9 +90,9 @@ export default function Home() {
                   onChange={e => handleChange(field, i, 'team', e.target.value)}
                   style={{ color: entry.team ? '#000' : '#aaa' }}
                 >
-                  <option value="">未選擇小隊</option>
+                  <option value="">未選擇班級</option>
                   {[...Array(10)].map((_, i) => (
-                    <option key={i} value={i + 1}>{`第 ${i + 1} 小隊`}</option>
+                    <option key={i} value={i + 1}>{`天惠 ${i + 1} 班`}</option>
                   ))}
                 </select>
               </div>
@@ -106,7 +106,7 @@ export default function Home() {
       <h3 style={{ color: 'white' }}>總積分</h3>
       <div className={styles.points}>
         {teamPoints.map((p, i) => (
-          <div key={i}>第 {i + 1} 小隊：{p} 分</div>
+          <div key={i}>天惠 {i + 1} 班：{p} 分</div>
         ))}
       </div>
 
