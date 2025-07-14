@@ -1,0 +1,6 @@
+{
+  "projectSettings": {
+    "framework": "nextjs",
+    "public": true
+  }
+}
