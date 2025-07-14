@@ -112,11 +112,17 @@ export default function Home() {
 
       <button
         onClick={() => {
-          if (confirm("你確定要清除所有資料嗎？這個動作無法復原！")) {
-            set(ref(database, 'scoreData'), {}) // 清空 Firebase 資料
+          const password = prompt("請輸入密碼才能清除所有資料")
+          if (password === "159357") { // ← 請改成你自己的密碼
+            if (confirm("你確定要清除所有資料嗎？這個動作無法復原！")) {
+              set(ref(database, 'scoreData'), {}) // 清空 Firebase 資料
+              alert("✅ 成績已初始化")
+            }
+          } else {
+            alert("❌ 密碼錯誤，無法執行初始化")
           }
         }}
-        style={{
+          style={{
           backgroundColor: 'red',
           color: 'white',
           fontSize: '18px',
