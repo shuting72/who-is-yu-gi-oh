@@ -1,20 +1,18 @@
+// pages/index.js
 'use client'
 
 import { useState, useEffect } from 'react'
 import styles from '../styles/display.module.css'
-
-// ✅ 匯入 Firebase
-import { ref, set, onValue } from 'firebase/database'
+import { ref, set, onValue, push } from 'firebase/database'
 import { database } from '../firebase'
 
 const fields = [
   'USB王', '跳高王', '擲筊王', '高音王',
   '海賊王', '下腰王', '準時王', '乾眼王',
   '色盲王', '錯王', '蟹堡王', '神射王',
-  '搧大王', '守門王', '定格王', '反應王',
+  '搧大王', '守門王', '定格王', '反應王'
 ]
 
-// ✅ ✅ 單位正確更新
 const units = [
   '秒', '公分', '次', '音',
   '分', '公分', '秒', '秒',
@@ -22,34 +20,69 @@ const units = [
   '杯', '顆', '公分', '毫秒'
 ]
 
+const placeholders = [
+  '3.24', '', '', '如：C4',
+  '', '35.24', '3.24', '30.24',
+  '', '', '', '',
+  '', '', '3.24', ''
+]
+
+// 高音排序對照表（A0～C8）
+const pitchOrder = (() => {
+  const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+  const result = {}
+  let index = 0
+  for (let octave = 0; octave <= 8; octave++) {
+    for (let note of notes) {
+      const name = note + octave
+      result[name] = index++
+    }
+  }
+  return result
+})()
+
 export default function Home() {
   const [data, setData] = useState({})
 
-  // ✅ 從 Firebase 讀取資料
   useEffect(() => {
     const dbRef = ref(database, 'scoreData')
-    return onValue(dbRef, (snapshot) => {
+    return onValue(dbRef, snapshot => {
       const value = snapshot.val()
       if (value) setData(value)
     })
   }, [])
 
-  const handleChange = (field, index, key, value) => {
-    setData(prev => {
-      const updated = { ...prev }
-      updated[field] = updated[field] || Array(5).fill({ name: '', score: '', team: '' })
-      updated[field][index] = {
-        ...updated[field][index],
-        [key]: value
-      }
+  const compare = (field, a, b) => {
+    if (!a || !b) return 0
+    const i = fields.indexOf(field)
+    const scoreA = a.score
+    const scoreB = b.score
+    const toFloat = s => parseFloat(s.replace(/[^\d.]/g, ''))
 
-      // ✅ 僅更新這一關資料，不會覆蓋整份資料
-      set(ref(database, `scoreData/${field}`), updated[field])
-      return updated
-    })
+    // 特殊：高音王
+    if (field === '高音王') {
+      const getPitch = s => pitchOrder[s.toUpperCase()] ?? -1
+      return getPitch(b.score) - getPitch(a.score)
+    }
+
+    // 越低越好（反向排序）
+    const lowerIsBetter = ['USB王', '下腰王', '準時王', '定格王', '反應王']
+    if (lowerIsBetter.includes(field)) {
+      return toFloat(a.score) - toFloat(b.score)
+    }
+
+    // 越高越好（正常排序）
+    return toFloat(b.score) - toFloat(a.score)
   }
 
-  // 計算各隊總積分
+  const handleChange = (field, name, score, team) => {
+    const updated = data[field] ? [...data[field]] : []
+    updated.push({ name, score, team })
+    updated.sort((a, b) => compare(field, a, b))
+    const top5 = updated.slice(0, 5)
+    set(ref(database, `scoreData/${field}`), top5)
+  }
+
   const teamPoints = Array(10).fill(0)
   fields.forEach(field => {
     if (data[field]) {
@@ -64,37 +97,39 @@ export default function Home() {
 
   return (
     <div className={styles.admin}>
-      <h2 style={{ color: 'white' }}>控場介面</h2>
+      <h2 style={{ color: 'white' }}>控場介面（自動排序）</h2>
 
       <div className={styles.grid}>
         {fields.map((field, fIndex) => (
           <div key={field} className={styles.card}>
             <strong>{field}</strong>
+            <div className={styles.row}>
+              <input placeholder="記錄保持人" id={`name-${field}`} />
+              <input placeholder={placeholders[fIndex] ? `成績（${units[fIndex]}，例如：${placeholders[fIndex]}）` : `成績（${units[fIndex]}）`} id={`score-${field}`} />
+              <select id={`team-${field}`}>
+                <option value="">選擇班級</option>
+                {[...Array(10)].map((_, i) => (
+                  <option key={i} value={i + 1}>{`天惠 ${i + 1} 班`}</option>
+                ))}
+              </select>
+              <button onClick={() => {
+                const name = document.getElementById(`name-${field}`).value
+                const score = document.getElementById(`score-${field}`).value
+                const team = document.getElementById(`team-${field}`).value
+                if (name && score && team) {
+                  handleChange(field, name, score, team)
+                } else {
+                  alert('請輸入完整資訊')
+                }
+              }}>送出</button>
+            </div>
+
             {(data[field] || Array(5).fill({})).map((entry, i) => (
               <div key={i} className={styles.row}>
-                <span>{['🥇', '🥈', '🥉', '4️⃣', '5️⃣'][i]}</span>
-                <input
-                  placeholder="記錄保持人"
-                  value={entry.name || ''}
-                  onChange={e => handleChange(field, i, 'name', e.target.value)}
-                  style={{ color: entry.name ? '#000' : '#aaa' }}
-                />
-                <input
-                  placeholder={`成績（${units[fIndex]}）`}
-                  value={entry.score || ''}
-                  onChange={e => handleChange(field, i, 'score', e.target.value)}
-                  style={{ color: entry.score ? '#000' : '#aaa' }}
-                />
-                <select
-                  value={entry.team || ''}
-                  onChange={e => handleChange(field, i, 'team', e.target.value)}
-                  style={{ color: entry.team ? '#000' : '#aaa' }}
-                >
-                  <option value="">未選擇班級</option>
-                  {[...Array(10)].map((_, i) => (
-                    <option key={i} value={i + 1}>{`天惠 ${i + 1} 班`}</option>
-                  ))}
-                </select>
+                <span>{['🥇','🥈','🥉','4️⃣','5️⃣'][i]}</span>
+                <span>{entry.name || '-'}</span>
+                <span>{entry.score || '-'}</span>
+                <span>{entry.team ? `天惠 ${entry.team} 班` : '-'}</span>
               </div>
             ))}
           </div>
@@ -109,32 +144,6 @@ export default function Home() {
           <div key={i}>天惠 {i + 1} 班：{p} 分</div>
         ))}
       </div>
-
-      <button
-        onClick={() => {
-          const password = prompt("請輸入密碼才能清除所有資料")
-          if (password === "159357") { // ← 請改成你自己的密碼
-            if (confirm("你確定要清除所有資料嗎？這個動作無法復原！")) {
-              set(ref(database, 'scoreData'), {}) // 清空 Firebase 資料
-              alert("✅ 成績已初始化")
-            }
-          } else {
-            alert("❌ 密碼錯誤，無法執行初始化")
-          }
-        }}
-          style={{
-          backgroundColor: 'red',
-          color: 'white',
-          fontSize: '18px',
-          padding: '10px 20px',
-          border: 'none',
-          borderRadius: '5px',
-          marginTop: '40px',
-          cursor: 'pointer'
-        }}
-      >
-        🔄 初始化所有成績
-      </button>
     </div>
   )
 }
