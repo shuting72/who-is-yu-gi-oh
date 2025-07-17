@@ -95,18 +95,40 @@ export default function AdminPage() {
   }
 
   const handleSubmit = (field) => {
-    const input = inputs[field]
-    if (!input || !input.name || !input.score || !input.team) return
+  if (!input.name || !input.score || !input.team) return alert("請填寫所有欄位");
+  if (!isValidScore(input.score, field)) return alert("成績格式不正確");
 
-    const newEntry = { ...input }
-    let updated = (data[field] || []).filter(e => e.name !== newEntry.name)
-    updated.push(newEntry)
-    updated.sort((a, b) => compare(field, a, b))
-    updated = updated.slice(0, 5)
+  const newEntry = { ...input, timestamp: Date.now() };
+  const current = data[field] || [];
 
-    set(ref(database, `scoreData/${field}`), updated)
-    setInputs(prev => ({ ...prev, [field]: { name: '', score: '', team: '' } }))
+  // 找出是否已有同名
+  const existingIndex = current.findIndex(e => e.name === newEntry.name);
+
+  if (existingIndex !== -1) {
+    // 如果新成績更好，才取代舊成績
+    const existingEntry = current[existingIndex];
+    if (!isBetter(field, newEntry.score, existingEntry.score)) {
+      alert("已有更佳成績，未更新");
+      setInput({ name: '', score: '', team: '' });
+      return;
+    }
+    current.splice(existingIndex, 1); // 移除舊成績
   }
+
+  const updated = [...current, newEntry];
+
+  // 重新排序，只保留前五名
+  const sorted = updated
+    .sort((a, b) => {
+      const result = compareScore(field, a.score, b.score);
+      return result !== 0 ? result : a.timestamp - b.timestamp; // 同分比早
+    })
+    .slice(0, 5);
+
+  set(ref(database, `scoreData/${field}`), sorted);
+  setInput({ name: '', score: '', team: '' }); // ✅ 輸入後清空欄位
+};
+
 
   // 各隊總分
   const teamPoints = Array(10).fill(0)
@@ -176,7 +198,7 @@ export default function AdminPage() {
       <button
         onClick={() => {
           const password = prompt("請輸入管理密碼：")
-          if (password === "yourPassword123") {
+          if (password === "159357") {
             if (confirm("你確定要清除所有資料嗎？這個動作無法復原！")) {
               set(ref(database, 'scoreData'), {})
               alert("所有成績已初始化")
