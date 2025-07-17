@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ref, onValue, set, push } from 'firebase/database'
+import { ref, onValue, set } from 'firebase/database'
 import { database } from '../firebase'
 import styles from '../styles/display.module.css'
 
@@ -20,7 +20,6 @@ const units = [
   '杯', '顆', '公分', '毫秒'
 ]
 
-// 高音排序對照表
 const pitchOrder = [
   'A0', 'B0',
   'C1', 'D1', 'E1', 'F1', 'G1',
@@ -40,11 +39,9 @@ const pitchOrder = [
   'C8'
 ]
 
-// 排序邏輯
 const compare = (field, a, b) => {
   const af = a.score, bf = b.score
   const numA = parseFloat(af), numB = parseFloat(bf)
-
   const getPitchIndex = pitch => pitchOrder.indexOf(pitch)
 
   switch (field) {
@@ -72,6 +69,20 @@ const compare = (field, a, b) => {
   }
 }
 
+const isBetter = (field, newScore, oldScore) => {
+  const newEntry = { score: newScore }
+  const oldEntry = { score: oldScore }
+  return compare(field, newEntry, oldEntry) < 0
+}
+
+const isValidScore = (field, value) => {
+  if (field === '高音王') {
+    return pitchOrder.includes(value)
+  } else {
+    return /^[\d.]+$/.test(value)
+  }
+}
+
 export default function AdminPage() {
   const [data, setData] = useState({})
   const [inputs, setInputs] = useState({})
@@ -95,42 +106,38 @@ export default function AdminPage() {
   }
 
   const handleSubmit = (field) => {
-  if (!input.name || !input.score || !input.team) return alert("請填寫所有欄位");
-  if (!isValidScore(input.score, field)) return alert("成績格式不正確");
+    const input = inputs[field] || {}
+    if (!input.name || !input.score || !input.team) return alert("請填寫所有欄位");
+    if (!isValidScore(field, input.score)) return alert("成績格式不正確");
 
-  const newEntry = { ...input, timestamp: Date.now() };
-  const current = data[field] || [];
+    const newEntry = { ...input, timestamp: Date.now() };
+    const current = data[field] || [];
 
-  // 找出是否已有同名
-  const existingIndex = current.findIndex(e => e.name === newEntry.name);
+    const existingIndex = current.findIndex(e => e.name === newEntry.name);
 
-  if (existingIndex !== -1) {
-    // 如果新成績更好，才取代舊成績
-    const existingEntry = current[existingIndex];
-    if (!isBetter(field, newEntry.score, existingEntry.score)) {
-      alert("已有更佳成績，未更新");
-      setInput({ name: '', score: '', team: '' });
-      return;
+    if (existingIndex !== -1) {
+      const existingEntry = current[existingIndex];
+      if (!isBetter(field, newEntry.score, existingEntry.score)) {
+        alert("已有更佳成績，未更新");
+        setInputs(prev => ({ ...prev, [field]: { name: '', score: '', team: '' } }))
+        return;
+      }
+      current.splice(existingIndex, 1);
     }
-    current.splice(existingIndex, 1); // 移除舊成績
+
+    const updated = [...current, newEntry];
+
+    const sorted = updated
+      .sort((a, b) => {
+        const result = compare(field, a, b);
+        return result !== 0 ? result : a.timestamp - b.timestamp;
+      })
+      .slice(0, 5);
+
+    set(ref(database, `scoreData/${field}`), sorted);
+    setInputs(prev => ({ ...prev, [field]: { name: '', score: '', team: '' } }))
   }
 
-  const updated = [...current, newEntry];
-
-  // 重新排序，只保留前五名
-  const sorted = updated
-    .sort((a, b) => {
-      const result = compareScore(field, a.score, b.score);
-      return result !== 0 ? result : a.timestamp - b.timestamp; // 同分比早
-    })
-    .slice(0, 5);
-
-  set(ref(database, `scoreData/${field}`), sorted);
-  setInput({ name: '', score: '', team: '' }); // ✅ 輸入後清空欄位
-};
-
-
-  // 各隊總分
   const teamPoints = Array(10).fill(0)
   for (const field of fields) {
     if (data[field]) {
@@ -146,7 +153,6 @@ export default function AdminPage() {
   return (
     <div className={styles.admin}>
       <h2 style={{ color: 'white' }}>控場介面</h2>
-
       <div className={styles.grid}>
         {fields.map((field, fIndex) => (
           <div key={field} className={styles.card}>
@@ -175,7 +181,6 @@ export default function AdminPage() {
               </select>
             </div>
             <button onClick={() => handleSubmit(field)}>➕ 加入成績</button>
-
             <div>
               {(data[field] || []).map((entry, i) => (
                 <div key={i}>
