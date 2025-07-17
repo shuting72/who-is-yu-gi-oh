@@ -62,14 +62,16 @@ export default function Home() {
   }, [])
 
   const handleInputChange = (field, key, value) => {
-    setInputs(prev => ({
-      ...prev,
-      [field]: {
-        ...prev[field],
-        [key]: value
-      }
-    }))
-  }
+  setInputs(prev => ({
+    ...prev,
+    [field]: {
+      name: key === 'name' ? value : (prev[field]?.name || ''),
+      score: key === 'score' ? value : (prev[field]?.score || ''),
+      team: key === 'team' ? value : (prev[field]?.team || ''),
+    }
+  }))
+}
+
 
   const handleAddScore = (field) => {
     const { name = '', score = '', team = '' } = inputs[field] || {}
