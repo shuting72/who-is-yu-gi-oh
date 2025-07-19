@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import styles from '../styles/display.module.css'
 
-// ✅ 匯入 Firebase
 import { ref, onValue } from 'firebase/database'
 import { database } from '../firebase'
 
@@ -21,7 +20,6 @@ const icons = [
   '🪭', '🥅', '🤖', '⚡',
 ]
 
-// ✅ 單位已修正
 const units = [
   '秒', '公分', '次', '音',
   '分', '公分', '秒', '秒',
@@ -39,7 +37,6 @@ export default function Display() {
   const [data, setData] = useState({})
   const [page, setPage] = useState(0)
 
-  // ✅ 每幾秒切換畫面
   useEffect(() => {
     const interval = setInterval(() => {
       setPage(p => (p + 1) % 9)
@@ -47,7 +44,6 @@ export default function Display() {
     return () => clearInterval(interval)
   }, [page])
 
-  // ✅ 從 Firebase 讀取資料並即時更新
   useEffect(() => {
     const dbRef = ref(database, 'scoreData')
     const unsubscribe = onValue(dbRef, (snapshot) => {
@@ -59,11 +55,9 @@ export default function Display() {
         setData({})
       }
     })
-
     return () => unsubscribe()
   }, [])
 
-  // ✅ 首頁畫面：16 格總表
   if (page === 0) {
     return (
       <div className={styles.grid16}>
@@ -83,7 +77,6 @@ export default function Display() {
     )
   }
 
-  // ✅ 輪播畫面：每次顯示兩關排行榜
   const pair = [(page - 1) * 2, (page - 1) * 2 + 1]
 
   return (
@@ -93,8 +86,10 @@ export default function Display() {
           <div className={styles.title}>{icons[i]} {fields[i]}</div>
           <div className={styles.rankings}>
             {(data[fields[i]] || []).map((entry, j) => (
-              <div key={j}>
-                {['🥇', '🥈', '🥉', '4️⃣', '5️⃣'][j]} {entry.name || '--'} - {entry.score || '--'}{entry.score ? units[i] : ''}
+              <div key={j} className={styles.rowEntry}>
+                <span className={styles.rankIcon}>{['🥇', '🥈', '🥉', '4️⃣', '5️⃣'][j]}</span>
+                <span className={styles.nameColumn}>{entry.name || '--'}</span>
+                <span className={styles.scoreColumn}>{entry.score || '--'}{entry.score ? units[i] : ''}</span>
               </div>
             ))}
           </div>
