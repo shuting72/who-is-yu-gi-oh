@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import styles from '../styles/display.module.css'
 
-// ✅ 匯入 Firebase
 import { ref, onValue } from 'firebase/database'
 import { database } from '../firebase'
 
@@ -56,7 +55,6 @@ export default function Display() {
         setData({})
       }
     })
-
     return () => unsubscribe()
   }, [])
 
@@ -88,10 +86,10 @@ export default function Display() {
           <div className={styles.title}>{icons[i]} {fields[i]}</div>
           <div className={styles.rankings}>
             {(data[fields[i]] || []).map((entry, j) => (
-              <div key={j} className={styles.rankingRow}>
-                <span className={styles.rankingIcon}>{['🥇', '🥈', '🥉', '4️⃣', '5️⃣'][j]}</span>
-                <span className={styles.rankingName}>{entry.name || '--'}</span>
-                <span className={styles.rankingScore}>{entry.score || '--'}{entry.score ? units[i] : ''}</span>
+              <div key={j} className={styles.rowEntry}>
+                <span className={styles.rankIcon}>{['🥇', '🥈', '🥉', '4️⃣', '5️⃣'][j]}</span>
+                <span className={styles.nameColumn}>{entry.name || '--'}</span>
+                <span className={styles.scoreColumn}>{entry.score || '--'}{entry.score ? units[i] : ''}</span>
               </div>
             ))}
           </div>
