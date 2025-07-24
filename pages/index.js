@@ -138,6 +138,14 @@ export default function AdminPage() {
     setInputs(prev => ({ ...prev, [field]: { name: '', score: '', team: '' } }))
   }
 
+  const handleDelete = (field, timestamp) => {
+    if (confirm("你確定要刪除這筆成績嗎？")) {
+      const current = data[field] || []
+      const updated = current.filter(entry => entry.timestamp !== timestamp)
+      set(ref(database, `scoreData/${field}`), updated)
+    }
+  }
+
   const teamPoints = Array(10).fill(0)
   for (const field of fields) {
     if (data[field]) {
@@ -183,8 +191,9 @@ export default function AdminPage() {
             <button onClick={() => handleSubmit(field)}>➕ 加入成績</button>
             <div>
               {(data[field] || []).map((entry, i) => (
-                <div key={i}>
+                <div key={entry.timestamp}>
                   {['🥇','🥈','🥉','4️⃣','5️⃣'][i]} {entry.name} {entry.score} 天惠 {entry.team} 班
+                  <button onClick={() => handleDelete(field, entry.timestamp)}>🗑️</button>
                 </div>
               ))}
             </div>
