@@ -45,7 +45,7 @@ export default function Display() {
   }, [page])
 
   useEffect(() => {
-    const dbRef = ref(database, 'scoreData')
+    const dbRef = ref(database, 'allScores')
     const unsubscribe = onValue(dbRef, (snapshot) => {
       const value = snapshot.val()
       if (value) {
@@ -62,7 +62,7 @@ export default function Display() {
     return (
       <div className={styles.grid16}>
         {fields.map((field, i) => {
-          const first = data[field]?.[0]
+          const first = (data[field] || []).slice(0, 5)[0]
           const team = parseInt(first?.team)
           const bg = colors[team - 1] || 'white'
           return (
@@ -85,13 +85,16 @@ export default function Display() {
         <div key={i} className={styles.panel}>
           <div className={styles.title}>{icons[i]} {fields[i]}</div>
           <div className={styles.rankings}>
-            {(data[fields[i]] || []).map((entry, j) => (
-              <div key={j} className={styles.rowEntry}>
-                <span className={styles.rankIcon}>{['🥇', '🥈', '🥉', '4️⃣', '5️⃣'][j]}</span>
-                <span className={styles.nameColumn}>{entry.name || '--'}</span>
-                <span className={styles.scoreColumn}>{entry.score || '--'}{entry.score ? units[i] : ''}</span>
-              </div>
-            ))}
+            {[...Array(5)].map((_, j) => {
+              const entry = (data[fields[i]] || [])[j] || {}
+              return (
+                <div key={j} className={styles.rowEntry}>
+                  <span className={styles.rankIcon}>{['🥇', '🥈', '🥉', '4️⃣', '5️⃣'][j]}</span>
+                  <span className={styles.nameColumn}>{entry.name || '--'}</span>
+                  <span className={styles.scoreColumn}>{entry.score || '--'}{entry.score ? units[i] : ''}</span>
+                </div>
+              )
+            })}
           </div>
         </div>
       ))}
