@@ -140,11 +140,25 @@ export default function AdminPage() {
 
   const handleDelete = (field, timestamp) => {
     if (confirm("你確定要刪除這筆成績嗎？")) {
-      const current = data[field] || []
-      const updated = current.filter(entry => entry.timestamp !== timestamp)
-      set(ref(database, `scoreData/${field}`), updated)
+      const dbRef = ref(database, `scoreData/${field}`)
+        onValue(dbRef, (snapshot) => {
+          const current = snapshot.val() || []
+          const updated = current.filter(entry => entry.timestamp !== timestamp)
+
+          const sorted = updated
+            .sort((a, b) => {
+              const result = compare(field, a, b)
+              return result !== 0 ? result : a.timestamp - b.timestamp
+            })
+          .slice(0, 5)
+
+          set(ref(database, `scoreData/${field}`), sorted)
+        }, {
+        onlyOnce: true
+        })
+      }
     }
-  }
+
 
   const teamPoints = Array(10).fill(0)
   for (const field of fields) {
