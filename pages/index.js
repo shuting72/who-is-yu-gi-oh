@@ -63,7 +63,7 @@ const compare = (field, a, b) => {
     case '守門王':
       return numB - numA
     case '高音王':
-      return getPitchIndex(bf) - getPitchIndex(af)
+      return pitchOrder.indexOf(bf) - pitchOrder.indexOf(af)
     default:
       return 0
   }
@@ -110,55 +110,48 @@ export default function AdminPage() {
     if (!input.name || !input.score || !input.team) return alert("請填寫所有欄位");
     if (!isValidScore(field, input.score)) return alert("成績格式不正確");
 
-    const newEntry = { ...input, timestamp: Date.now() };
-    const current = data[field] || [];
+    const newEntry = { ...input, timestamp: Date.now() }
+    const current = data[field] || []
 
-    const existingIndex = current.findIndex(e => e.name === newEntry.name);
+    const existingIndex = current.findIndex(e => e.name === newEntry.name)
 
     if (existingIndex !== -1) {
-      const existingEntry = current[existingIndex];
+      const existingEntry = current[existingIndex]
       if (!isBetter(field, newEntry.score, existingEntry.score)) {
-        alert("已有更佳成績，未更新");
+        alert("已有更佳成績，未更新")
         setInputs(prev => ({ ...prev, [field]: { name: '', score: '', team: '' } }))
-        return;
+        return
       }
-      current.splice(existingIndex, 1);
+      current.splice(existingIndex, 1)
     }
 
-    const updated = [...current, newEntry];
-
+    const updated = [...current, newEntry]
     const sorted = updated
       .sort((a, b) => {
-        const result = compare(field, a, b);
-        return result !== 0 ? result : a.timestamp - b.timestamp;
+        const result = compare(field, a, b)
+        return result !== 0 ? result : a.timestamp - b.timestamp
       })
-      .slice(0, 5);
+      .slice(0, 5)
 
-    set(ref(database, `scoreData/${field}`), sorted);
+    set(ref(database, `scoreData/${field}`), sorted)
     setInputs(prev => ({ ...prev, [field]: { name: '', score: '', team: '' } }))
   }
 
-  const handleDelete = (field, timestamp) => {
-    if (confirm("你確定要刪除這筆成績嗎？")) {
-      const dbRef = ref(database, `scoreData/${field}`)
-        onValue(dbRef, (snapshot) => {
-          const current = snapshot.val() || []
-          const updated = current.filter(entry => entry.timestamp !== timestamp)
+  const handleDelete = (field, indexToDelete) => {
+    if (!confirm("你確定要刪除此筆成績嗎？")) return;
 
-          const sorted = updated
-            .sort((a, b) => {
-              const result = compare(field, a, b)
-              return result !== 0 ? result : a.timestamp - b.timestamp
-            })
-          .slice(0, 5)
+    const current = data[field] || []
+    const updated = [...current.slice(0, indexToDelete), ...current.slice(indexToDelete + 1)]
 
-          set(ref(database, `scoreData/${field}`), sorted)
-        }, {
-        onlyOnce: true
-        })
-      }
-    }
+    const sorted = updated
+      .sort((a, b) => {
+        const result = compare(field, a, b)
+        return result !== 0 ? result : a.timestamp - b.timestamp
+      })
+      .slice(0, 5)
 
+    set(ref(database, `scoreData/${field}`), sorted)
+  }
 
   const teamPoints = Array(10).fill(0)
   for (const field of fields) {
@@ -205,9 +198,9 @@ export default function AdminPage() {
             <button onClick={() => handleSubmit(field)}>➕ 加入成績</button>
             <div>
               {(data[field] || []).map((entry, i) => (
-                <div key={entry.timestamp}>
+                <div key={i}>
                   {['🥇','🥈','🥉','4️⃣','5️⃣'][i]} {entry.name} {entry.score} 天惠 {entry.team} 班
-                  <button onClick={() => handleDelete(field, entry.timestamp)}>🗑️</button>
+                  <button onClick={() => handleDelete(field, i)} style={{ marginLeft: '10px' }}>❌</button>
                 </div>
               ))}
             </div>
